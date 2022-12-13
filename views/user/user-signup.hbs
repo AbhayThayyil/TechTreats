@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 m-auto">
+      <h1 class="mt-4 mb-4">Create a new Account</h1>
+      
+      <form action="/user-signup" method="POST">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="name"
+            class="form-control"
+            name="name"
+            id="name"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="name">Mobile Number</label>
+          <input
+            type="tel"
+            class="form-control"
+            name="mobile"
+            id="mobile"
+            minlength="10"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" />
+            {{#if signupError}}
+                <h5 class="text-danger">{{signupError}}</h5>
+		     {{/if}}
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+          />
+        </div>
+        
+        <br>
+        
+        <button type="submit" class="btn btn-primary button-style">
+          Sign Up
+        </button>
+      </form>
+       <p class="mt-3">
+        Already have an account? <a href="/user-login"> Log In!</a>
+      </p>
+    </div>
+  </div>
+</div>

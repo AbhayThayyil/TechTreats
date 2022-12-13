@@ -1,0 +1,158 @@
+
+
+<div class="col-md-12 ">
+	<form action="/checkout" method="post" class="" id="checkout-form">
+
+	<div class="row">
+		<div class="col-md-7 mt-5 ml-1 ">
+			
+			<h4 class="mb-3 text-center font-weight-bold">Enter Delivery Details</h4>
+
+			<div class="controls form-group">
+				<input class="billing-address-name form-control" id="address" type="text" name="address" placeholder="Address"
+					required="">
+			</div>
+			<div class="controls form-group">
+				<input type="text" class="form-control" id="city" placeholder="Town/City" name="city" required="">
+			</div>
+			<div class="w3_agileits_card_number_grids">
+				<div class="w3_agileits_card_number_grid_left form-group">
+					<div class="controls">
+						<input type="number" class="form-control" id="pincode" placeholder="Pin Code" name="pincode" required="">
+					</div>
+				</div>
+				<div class="w3_agileits_card_number_grid_left form-group">
+					<div class="controls">
+						<input type="number" class="form-control" id="mobile"  placeholder="Mobile Number" name="mobile" required="">
+						{{!-- id passing --}}
+						<input type="text" name="userId" id="" value="{{userInSession._id}}" hidden>
+					</div>
+				</div>
+
+				
+				
+			</div>
+		
+		</div>
+		<div class="col-md-4 text-center mt-5 ml-5 border border-2">
+			<h4 class="mb-4 font-weight-bold">Payment</h4>
+			<div class="d-block mt-3">
+				<div>
+					<div class="custom-control custom-radio mb-2">
+						<input id="credit" name="payment-method" type="radio" class="custom-control-input" value="COD" checked=""
+							required="">
+						<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
+					</div>
+					<div class="custom-control custom-radio mb-2">
+						<input id="debit" name="payment-method" type="radio" class="custom-control-input" value="ONLINE" required="">
+						<label class="custom-control-label" for="debit">Razor Pay</label>
+					</div>
+
+					<div class="mt-5">
+						<h3 class="font-weight-bold">Total:₹ {{total}}</h3>
+					</div>
+
+					<div class="checkout-right-basket ">
+					<button type="submit" class="check_out btn btn-success text-white font-weight-bold">MAKE A PAYMENT
+						<span class="far fa-hand-point-right"></span>
+					</button>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	</form>
+</div>
+
+
+
+
+
+
+
+
+
+{{!-- <div>
+	<div class="row">
+		<div class="container col-md-6 mx-5">
+			<div class="row"></div>
+			<div class="checkout-left">
+				<div class="address_form_agile mt-sm-5 mt-4">
+					<h4 class="mb-sm-4 mb-3">Add a new Details</h4>
+					<form action="payment.html" method="post" class="" id="checkout-form">
+						<div class="creditly-wrapper wthree, w3_agileits_wrapper">
+							<div class="information-wrapper">
+								<div class="first-row">
+									<div class="controls form-group">
+										<input class="billing-address-name form-control" type="text" name="name"
+											placeholder="Full Name" required="">
+									</div>
+									<div class="w3_agileits_card_number_grids">
+										<div class="w3_agileits_card_number_grid_left form-group">
+											<div class="controls">
+												<input type="text" class="form-control" placeholder="Mobile Number"
+													name="number" required="">
+											</div>
+										</div>
+										<div class="w3_agileits_card_number_grid_right form-group">
+											<div class="controls">
+												<input type="text" class="form-control" placeholder="Landmark"
+													name="landmark" required="">
+											</div>
+										</div>
+									</div>
+									<div class="controls form-group">
+										<input type="text" class="form-control" placeholder="Town/City" name="city"
+											required="">
+									</div>
+									<div class="controls form-group">
+										<select class="option-w3ls">
+											<option>Select Address type</option>
+											<option>Office</option>
+											<option>Home</option>
+											<option>Commercial</option>
+
+										</select>
+									</div>
+								</div>
+								<button class="submit check_out btn">Delivery to this Address</button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+			</div>
+		</div>
+		<div class="container col-md-3 mt-5 pt-5 border rounded" style="text-align: center">
+			<h4 class="mb-4 font-weight-bold">Payment</h4>
+
+			<div class="d-block mt-3">
+				<div>
+					<div class="custom-control custom-radio mb-2">
+						<input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""
+							required="">
+						<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
+					</div>
+					<div class="custom-control custom-radio mb-2">
+						<input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required="">
+						<label class="custom-control-label" for="debit">Razor Pay</label>
+					</div>
+
+					<div class="mt-5">
+						<h3 class="font-weight-bold">Total:₹ {{total}}</h3>
+					</div>
+				</div>
+
+
+				<div class="checkout-right-basket ">
+					<a href="payment.html">Make a Payment
+						<span class="far fa-hand-point-right"></span>
+					</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div> --}}
+

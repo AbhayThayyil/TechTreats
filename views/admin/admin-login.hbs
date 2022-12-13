@@ -1,0 +1,33 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 m-auto">
+      <h1 class="mt-4 mb-4">Admin Log In Page</h1>
+      <!-- Flash message -->
+     
+      <form action="/admin/admin-login" method="POST">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+          />
+          {{#if AdminLoginError}}
+                <h5 class="text-danger">{{AdminLoginError}}</h5>
+		      {{/if}}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary button-style">
+          Log In
+        </button>
+      </form>
+      
+      
+    </div>
+  </div>
+</div>

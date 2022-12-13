@@ -1,0 +1,44 @@
+
+    <section>
+        <div class="container">
+            {{#if catExists}}
+        <div class="alert alert-danger" role="alert">
+            {{catExists}}
+        </div>
+        {{/if}}
+<div class="row">
+            <div class="col-md-6 m-auto">
+                <div class="container mt-5 pl-5">
+                    <h2 class="text-center">Add Categories</h2>
+                    <form action="/admin/add-category" method="post" role="form" id="submit-form" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" class="form-control" id="contact-name" name="name" placeholder="Category Name">
+                            <span id="name-error" style="color: red;"></span>
+                        </div>
+                    
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <input type="text" class="form-control" id="contact-description" name="description" placeholder="Enter Category description" >
+                            <span id="description-error" style="color: red;"></span>
+                        </div>  
+                        
+
+                              <div class="text-center">
+                                 <button type="submit" id="contact-submit" class="btn btn-primary float-right mt-2" onclick="return validateForm()" >Add</button>
+                             <div id="submit-error" style="color: red;"></div>
+                              </div>
+                                
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+    </section>
+   
+    
+
+
+
+    

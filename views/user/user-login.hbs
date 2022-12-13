@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 m-auto">
+      <h1 class="mt-4 mb-4">Log In Page</h1>
+      <!-- Flash message -->
+     
+      <form action="/user-login" method="POST">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" name="email" id="email" />
+          
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            id="password"
+          />
+          {{#if loginError}}
+                <h5 class="text-danger">{{loginError}}</h5>
+		      {{/if}}
+            {{#if blockError}}
+                <h5 class="text-danger">{{blockError}}</h5>
+		      {{/if}}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-success button-style">
+          Log In
+        </button>
+      </form>
+      <a href="/otp-login" >
+          <button class="btn btn-primary mt-3">OTP Login</button>
+        </a>
+      <p class="mt-3">
+        Don't have an account? <a href="/user-signup"> Sign Up!</a>
+      </p>
+    </div>
+  </div>
+</div>

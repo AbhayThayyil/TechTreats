@@ -1,0 +1,92 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 m-auto">
+                <div class="container mt-5 pl-5">
+                    <h2 class="text-center">Edit Products</h2>
+                    <form action="/admin/edit-product/{{product._id}}" method="post" role="form" id="submit-form"
+                        enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="">Name</label>
+                            <input type="text" class="form-control" id="contact-name" name="name"
+                                placeholder="Product Name" value="{{product.name}}">
+                            <span id="name-error" style="color: red;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Category</label>
+                            <select id="product-category" name="category" class="form-select" aria-label="Default select example">
+                            
+                            {{#each categories}}
+                            <option name="category" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                            
+                            </select>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="">Price</label>
+                            <input type="number" class="form-control" id="contact-price" name="price" placeholder="Price" value="{{product.price}}">
+                            <span id="price-error" style="color: red;"></span>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <input type="text" class="form-control" id="contact-description" name="description"
+                                placeholder="Enter product description" value="{{product.description}}">
+                            <span id="description-error" style="color: red;"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Stock</label>
+                            <input type="number" class="form-control" id="contact-stock" name="stock" placeholder="Stock" value="{{product.stock}}">
+                            <span id="stock-error" style="color: red;"></span>
+
+                        </div>  
+                        <div class="form-group">
+                            <label for="">Image</label>
+                            <img style="height:75px;weight:75px" src="/product-images/{{product._id}}.jpg" alt="" id="image1">
+                            <input type="file" class="form-control" id="image1" name="image" placeholder="" value="{{product.image}}" onchange="imageView(event)" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">sub-Image2</label>
+                            <img style="height:75px;weight:75px" src="/product-images2/{{product._id}}.jpg" alt="" id="image2">
+                            <input type="file" class="form-control" id="image2" name="image2" placeholder="" value="{{product.image2}}" onchange="imageView2(event)">
+                        </div>
+                        <div class="form-group">
+                            <label for="">sub-Image3</label>
+                            <img style="height:75px;weight:75px" src="/product-images3/{{product._id}}.jpg" alt="" id="image3">
+                            <input type="file" class="form-control" id="image3" name="image3" placeholder="" value="{{product.image3}}" onchange="imageView3(event)">
+                        </div>
+                        <div class="form-group">
+                            <label for="">sub-Image4</label>
+                            <img style="height:75px;weight:75px" src="/product-images4/{{product._id}}.jpg" alt="" id="image4">
+                            <input type="file" class="form-control" id="image4" name="image4" placeholder="" value="{{product.image4}}" onchange="imageView4(event)">
+                        </div>
+
+
+                        <div class="text-center">
+                            <button type="submit" id="contact-submit" class="btn btn-primary float-right mt-2"
+                                onclick="return validateForm()">Update</button>
+                            <div id="submit-error" style="color: red;"></div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function imageView(event){
+        document.getElementById('image1').src=URL.createObjectURL(event.target.files[0])      
+    }
+    function imageView2(event){
+        document.getElementById('image2').src=URL.createObjectURL(event.target.files[0])      
+    }
+    function imageView3(event){
+        document.getElementById('image3').src=URL.createObjectURL(event.target.files[0])      
+    }
+    function imageView4(event){
+        document.getElementById('image4').src=URL.createObjectURL(event.target.files[0])      
+    }
+</script>

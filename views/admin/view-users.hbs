@@ -1,0 +1,43 @@
+<section>
+    <div class="container">
+        <div class="row">
+            
+        </div>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">E mail</th>
+                    <th scope="col">Mobile</th>
+                    <th scope="col">Operations</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each users}}
+                <tr>
+                    <th scope="row">{{@index}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.mobile}}</td>
+                    
+                    <td>
+                        {{#if this.block}}
+                        <a href="/admin/unblock/{{this._id}}" class="btn btn-primary">Unblock</a>
+                        {{else}}
+                        <a href="/admin/block/{{this._id}}" class="btn btn-danger">Block</a>
+                        {{/if}}
+                    </td>
+
+
+                    {{!-- <td><a href="/admin/edit-product?id={{this._id}}" class="btn btn-danger">Block</a>
+                    <a href="/admin/delete-product/{{this._id}}" class="btn btn-success">Unblock</a></td> --}}
+
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</section>
