@@ -42,6 +42,7 @@ router.post('/verify-otp',postVerifyOtp)
 router.get('/user-logout',userLogout)
 
 //product-detail
+// router.get('/product-detail/',showProductDetail)
 router.get('/product-detail/',showProductDetail)
 
 //============CART================== 

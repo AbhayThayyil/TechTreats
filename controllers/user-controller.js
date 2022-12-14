@@ -74,7 +74,8 @@ module.exports={
         let prodId=req.query.id
         console.log(prodId,"checking prodid by query");
         productHelper.getSingleProduct(prodId).then((product)=>{
-            res.render('user/product-detail',{layout:'layout',userInSession,product})
+            // res.render('user/product-detail',{layout:'layout',userInSession,product})
+            res.render('user/single-product',{layout:'layout',userInSession,product,user:true})
         })
         .catch((error)=>{
             console.log(error);
