@@ -6,7 +6,8 @@ var logger = require('morgan');
 const hbs=require('express-handlebars')
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-var fileUpload=require('express-fileupload')
+const moment = require('moment');
+// var fileUpload=require('express-fileupload')
 var db=require('./config/connection')
 const session=require('express-session')
 
@@ -17,14 +18,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 //setup template engine
-app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname +"/views/layout/",partialsDir:__dirname+"/views/partials/"}))
+app.engine('hbs',hbs.engine({extname:'hbs',defaultLayout:'layout',layoutsDir:__dirname +"/views/layout/",partialsDir:__dirname+"/views/partials/",
+helpers:{
+  isEqual:(status,value,options)=>{
+    if(status==value){
+      return options.fn(this)
+    }
+    return options.inverse(this)
+  }
+}}))
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(fileUpload())
+// app.use(fileUpload())
 db.connect((err)=>{
   if(err)
   {

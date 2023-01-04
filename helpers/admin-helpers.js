@@ -81,10 +81,23 @@ module.exports = {
     });
   },
 
-  adminGetOrders:(userId)=>{
+  adminGetOrders:()=>{
     return new Promise(async(resolve,reject)=>{
-        let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).find().toArray()
+      try {
+        let orderDetails=await db.get().collection(collection.ORDER_COLLECTION).find().sort({_id:-1}).toArray()
+        let userId=orderDetails[0].userId
+        let userData=await db.get().collection(collection.USER_COLLECTION).find({_id:ObjectId(userId)}).toArray()
+        let name=userData[0].name
+        // console.log(name,"username");
+        orderDetails.name=name
+        // console.log(orderDetails,"show all orders");
         resolve(orderDetails)
+      } catch (error) {
+        let err={}
+            err.message="Something went wrong"
+            reject(err)
+      }
+       
     })
 }
 };

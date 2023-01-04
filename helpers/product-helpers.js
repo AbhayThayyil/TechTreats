@@ -41,6 +41,24 @@ module.exports={
             
         })
     },
+    
+    getAllProductsWithCategory:(categoryName)=>{
+        return new Promise(async(resolve,reject)=>{
+            try {
+                
+                let products=await db.get().collection(collection.PRODUCT_COLLECTION).find({category:categoryName}).sort({_id:-1}).toArray()
+            // console.log(products,"=====================products stored in products variable after getting it from DB=========");
+            console.log(products,"cat products");
+            resolve(products)
+            } catch (error) {
+                let err={}
+                err.message="cannot get all products"
+                reject(err)
+            }
+            
+            
+        })
+    },
 
 
     getProductDetails:(prodId)=>{
@@ -86,7 +104,8 @@ module.exports={
                     category:prodDetails.category,
                     price:prodDetails.price,
                     description:prodDetails.description,
-                    stock:prodDetails.stock
+                    stock:prodDetails.stock,
+                    image:prodDetails.image
                 }
             }).then((response)=>{
                 resolve()
@@ -107,6 +126,32 @@ module.exports={
             try {
                 let product=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(prodId)})
             resolve(product)
+            } catch (error) {
+                let err={}
+                err.message="Unable to access single product "
+                reject(err)
+            }
+            
+        })
+    },
+
+    //to change order status of product
+    changeOrderStatus:(data)=>{
+        // console.log(data,"what is passed to change order status from admin controller");
+        let orderId=data.order
+        let prodId=data.product
+        let value=data.changeValue
+
+        return new Promise((resolve,reject)=>{
+            try {
+                db.get().collection(collection.ORDER_COLLECTION)
+            .updateOne({_id:objectId(orderId),'products.item':objectId(prodId)},
+                {
+                    $set:{'products.$.status':value}
+                }
+            ).then((response)=>{
+                resolve(response)
+            })
             } catch (error) {
                 let err={}
                 err.message="Unable to access single product "

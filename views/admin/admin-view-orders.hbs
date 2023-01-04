@@ -7,7 +7,7 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    
+                    <th scope="col">Name</th>
                     <th scope="col">Date</th>
                     <th scope="col">Address</th>
                     <th scope="col">Town/City</th>
@@ -17,8 +17,9 @@
                     <th scope="col">Payment</th>
                     <th scope="col">Status</th>
                     <th scope="col">View</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Actions</th>
+                    
+
+                    
 
                     {{!-- <th scope="col">sub-Image2</th>
                     <th scope="col">sub-Image3</th>
@@ -30,6 +31,7 @@
                 {{#each orderDetails}}
                 <tr>
                     <th scope="row">{{@index}}</th>
+                    <td>{{this.userName}}</td>
                     <td>{{this.date}}</td>
                     <td>{{this.deliveryDetails.address}}</td>
                     <td>{{this.deliveryDetails.city}}</td>
@@ -38,8 +40,9 @@
                     <td>₹ {{this.totalPrice}}</td>
                     <td>{{this.paymentMethod}}</td>
 
-                    <td>{{this.status}}</td>
-                    <td><a class="btn btn-primary" href="/view-product-cards/{{this._id}}">View Products</a></td>
+                    <td>{{this.OrderStatus}}</td>
+                    <td><a class="btn btn-primary" href="/admin/view-admin-order-cards?id={{this._id}}">View Products</a></td>
+                    
                     
 
                 </tr>

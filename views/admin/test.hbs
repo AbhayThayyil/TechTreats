@@ -1,0 +1,28 @@
+<select onchange="changeStatus('{{this._id}}')" name="orderstatus" id="{{this._id}}">
+    <option selected value="{{this.status}}">change Status</option>
+    <option value="Placed">Placed</option>
+    <option value="Shipped">Shipped</option>
+    <option value="On the Way">On the Way</option>
+    <option value="Delivered">Delivered</option>
+    <option value="Cancelled">Cancelled</option>
+</select>
+
+
+<script>
+    function changeStatus(orderId,) {
+        let variableOne = document.getElementById(orderId)
+        let variableTwo = variableOne.options[variableOne.selectedIndex].text
+        console.log('jkjnaksskd')
+        $.ajax({
+            url: "/admin/update-order-status",
+            data: {
+                cartId: orderId,
+                status: variableTwo
+            },
+            method: 'post',
+            success: (response) => {
+                location.reload()
+            }
+        })
+    }
+</script>

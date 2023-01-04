@@ -8,7 +8,7 @@
                     <form action="/admin/add-product" method="post" role="form" id="submit-form" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" class="form-control" id="contact-name" name="name" placeholder="Product Name">
+                            <input type="text" class="form-control" id="contact-name" name="name" placeholder="Product Name" required>
                             <span id="name-error" style="color: red;"></span>
                         </div>
                         <div class="form-group">
@@ -16,7 +16,7 @@
                             
                             
                             <label for="">Category</label>
-                            <select id="product-category" name="category" class="form-select" aria-label="Default select example">
+                            <select id="product-category" name="category" class="form-select" aria-label="Default select example" required>
                             
                             {{#each categories}}
                             <option name="category" value="{{this.name}}">{{this.name}}</option>
@@ -28,26 +28,26 @@
                         </div>
                         <div class="form-group">
                             <label for="">Price</label>
-                            <input type="number" class="form-control" id="contact-price" name="price" placeholder="Price">
+                            <input type="number" class="form-control" id="contact-price" name="price" placeholder="Price" required>
                             <span id="price-error" style="color: red;"></span>
 
                         </div>
                         <div class="form-group">
                             <label for="">Description</label>
-                            <input type="text" class="form-control" id="contact-description" name="description" placeholder="Enter product description" >
+                            <input type="text" class="form-control" id="contact-description" name="description" placeholder="Enter product description" required>
                             <span id="description-error" style="color: red;"></span>
                         </div>
                         <div class="form-group">
                             <label for="">Stock</label>
-                            <input type="number" class="form-control" id="contact-stock" name="stock" placeholder="Stock">
+                            <input type="number" class="form-control" id="contact-stock" name="stock" placeholder="Stock" required>
                             <span id="stock-error" style="color: red;"></span>
 
                         </div>  
                         <div class="form-group">
                             <label for="">Image</label>
-                            <input type="file" class="form-control" id="contact-image" name="image" placeholder="" >
+                            <input type="file" class="form-control" id="contact-image" name="image" placeholder="" required  multiple>
                         </div>  
-                        <div class="form-group">
+                        {{!-- <div class="form-group">
                             <label for="">sub-Image2</label>
                             <input type="file" class="form-control" id="contact-image" name="image2" placeholder="" >
                         </div> 
@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label for="">sub-Image4</label>
                             <input type="file" class="form-control" id="contact-image" name="image4" placeholder="" >
-                        </div>  
+                        </div>   --}}
 
 
                               <div class="text-center">

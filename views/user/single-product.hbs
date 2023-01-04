@@ -17,19 +17,37 @@
 				<div class="wrapper row">
 					<div class="preview col-md-6">
 						
-						<div class="preview-pic tab-content" style="width:400px;height:500px align-items-center">
-						  <div class="tab-pane active" id="pic-1"><img src="/product-images/{{product._id}}.jpg" /></div>
-						  <div class="tab-pane" id="pic-2"><img src="/product-images2/{{product._id}}.jpg" /></div>
-						  <div class="tab-pane" id="pic-3"><img src="/product-images3/{{product._id}}.jpg" /></div>
+						<div class="preview-pic  tab-content text-center"  style= "text-center;">
+						 
+              <div class="tab-pane active"  id="imageToZoom1"><img  src="/productImages/{{product.image.[0]}}" /></div>
+              <div class="tab-pane" id="imageToZoom2"><img src="/productImages/{{product.image.[1]}}"/></div>
+						  <div class="tab-pane" id="imageToZoom3"><img src="/productImages/{{product.image.[2]}}" /></div>
+              <div class="tab-pane" id="imageToZoom4"><img src="/productImages/{{product.image.[3]}}" /></div>
 						</div>
-                        <div class="text-center">
-                            <ul class="preview-thumbnail nav nav-tabs">
-						    <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="/product-images/{{product._id}}.jpg" /></a></li>
-						    <li><a data-target="#pic-2" data-toggle="tab"><img src="/product-images2/{{product._id}}.jpg" /></a></li>
-						    <li><a data-target="#pic-3" data-toggle="tab"><img src="/product-images3/{{product._id}}.jpg" /></a></li>
-						    </ul>
-                        </div>
-						
+                <div class="">
+                    <ul class="preview-thumbnail nav nav-tabs  mx-auto" style="justify-content: center;">
+                      <li class="active">
+                        <a data-target="#imageToZoom1" data-toggle="tab" class="">
+                        <img src="/productImages/{{product.image.[0]}}" class="mx-auto" />
+                        </a>
+                        </li>
+                        <li>
+                          <a data-target="#imageToZoom2" data-toggle="tab">
+                            <img src="/productImages/{{product.image.[1]}}" class="mx-auto" />
+                          </a>
+                        </li>
+                        <li>
+                          <a data-target="#imageToZoom3" data-toggle="tab">
+                          <img src="/productImages/{{product.image.[2]}}" class="mx-auto" />
+                          </a>
+                        </li>
+                        <li>
+                          <a data-target="#imageToZoom4" data-toggle="tab">
+                            <img src="/productImages/{{product.image.[3]}}" class="mx-auto" />
+                          </a>
+                        </li>
+                    </ul>
+                </div>
 						
 					</div>
 					<div class="details col-md-6 mt-5 pt-5" >
@@ -83,7 +101,9 @@ body {
    }
 
 img {
-  max-width: 100%; }
+  max-width: 100%; 
+  
+  }
 
 .preview {
   display: -webkit-box;
@@ -100,6 +120,7 @@ img {
       margin-bottom: 20px; } }
 
 .preview-pic {
+   ;
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
@@ -107,40 +128,53 @@ img {
 
 .preview-thumbnail.nav-tabs {
   border: none;
-  margin-top: 15px; }
+  margin-top: 15px;
+  align-items: center;
+  
+   }
   .preview-thumbnail.nav-tabs li {
     width: 18%;
-    margin-right: 2.5%; }
+    height: 100%;
+    margin-right: 2.5%;
+    margin-left: 2.5%; 
+    }
     .preview-thumbnail.nav-tabs li img {
-      max-width: 100%;
-      display: block; }
+      max-width: 50%;
+      display: block;
+       }
     .preview-thumbnail.nav-tabs li a {
       padding: 0;
-      margin: 0; }
+      margin: 0; 
+      }
     .preview-thumbnail.nav-tabs li:last-of-type {
-      margin-right: 0; }
+      margin-right: 0; 
+      }
 
 .tab-content {
-  overflow: hidden; }
+  overflow: hidden; 
+  }
   .tab-content img {
     width: 100%;
     -webkit-animation-name: opacity;
             animation-name: opacity;
     -webkit-animation-duration: .3s;
-            animation-duration: .3s; }
+            animation-duration: .3s; 
+            }
 
 .card {
   margin-top: 50px;
   background: #eee;
   padding: 3em;
-  line-height: 1.5em; }
+  line-height: 1.5em; 
+  }
 
 @media screen and (min-width: 997px) {
   .wrapper {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex; } }
+    display: flex; 
+    } }
 
 .details {
   display: -webkit-box;
@@ -151,13 +185,15 @@ img {
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
       -ms-flex-direction: column;
-          flex-direction: column; }
+          flex-direction: column; 
+          }
 
 .colors {
   -webkit-box-flex: 1;
   -webkit-flex-grow: 1;
       -ms-flex-positive: 1;
-          flex-grow: 1; }
+          flex-grow: 1; 
+          }
 
 .product-title, .price, .sizes, .colors {
   text-transform: UPPERCASE;
@@ -242,3 +278,22 @@ img {
 
 /*# sourceMappingURL=style.css.map */
 </style>
+
+
+
+<script>
+var options = {
+    width: 500,
+    height:500,
+    zoomWidth: 450,
+    scale:1,
+    offset:{
+      vertical:0,
+      horizontal:-500
+    },
+};
+        new ImageZoom(document.getElementById("imageToZoom1"), options)
+        new ImageZoom(document.getElementById("imageToZoom2"), options)
+        new ImageZoom(document.getElementById("imageToZoom3"), options)
+        new ImageZoom(document.getElementById("imageToZoom4"), options)
+</script>

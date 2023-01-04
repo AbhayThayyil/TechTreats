@@ -8,13 +8,13 @@
                     <form action="/admin/edit-category/{{category._id}}" method="post" role="form" id="submit-form" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="">Name</label>
-                            <input type="text" class="form-control" id="contact-name" name="name" placeholder="Product Name" value="{{category.name}}">
+                            <input type="text" class="form-control" id="contact-name" name="name" placeholder="Product Name" value="{{category.name}}" required>
                             <span id="name-error" style="color: red;"></span>
                         </div>
                     
                         <div class="form-group">
                             <label for="">Description</label>
-                            <input type="text" class="form-control" id="contact-description" name="description" placeholder="Enter product description" value="{{category.description}}">
+                            <input type="text" class="form-control" id="contact-description" name="description" placeholder="Enter product description" value="{{category.description}}" required>
                             <span id="description-error" style="color: red;"></span>
                         </div>  
                         

@@ -6,6 +6,7 @@ const { ObjectId } = require('mongodb')
 
 module.exports={
     addCategory:(category)=>{
+        // console.log(category,"what is in category re body");
         //category name converted to uppercase
         category.name=category.name.toUpperCase();
         // console.log(category.name,"================category name UC============");
@@ -23,7 +24,8 @@ module.exports={
                 
                 db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data)=>{
                     console.log(data);
-                    resolve(data.insertedId);
+                    resolve({status:true})
+                    // resolve(data.insertedId);
             })
             }
             } catch (error) {
@@ -95,7 +97,7 @@ module.exports={
                     name:catDetails.name.toUpperCase(),
                     description:catDetails.description
                 }
-            }).then((response)=>{
+            }).then(()=>{
                 resolve()
             })
             } catch (error) {

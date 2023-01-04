@@ -12,9 +12,17 @@ function addToCart(prodId){
                 count=parseInt(count)+1
                 $('#cart-count').html(count)
             }
-            alert("Product added to cart")
-            location.reload()
+            swal({
+                title: "Product Added!",
+                text: "Product added to cart successfully!",
+                icon: "success",
+                button: "Ok!",
+              }).then(()=>{
+                location.reload();
+              });  
         }
+        
+        
     })
 }
 
@@ -38,8 +46,15 @@ function changeQuantity(cartId,prodId,userId,count){
         method:'post',
         success:(response)=>{
             if(response.removeProduct){
-                alert("Product Removed from cart")
-                location.reload()
+                swal({
+                    title: "Product Removed!",
+                    text: "Product removed from cart!",
+                    icon: "success",
+                    button: "Ok!",
+                  }).then(()=>{
+                    location.reload();
+                  });  
+                  
             }
             else{
                 console.log(response,"response in ajax ");
@@ -65,9 +80,16 @@ function removeCartItem(cartId,prodId){
         success:(response)=>{
             // console.log(response,"what comes at the end");
             if(response.removeProduct){
-                alert("Product Removed from cart")
+                swal({
+                    title: "Product Removed!",
+                    text: "Product removed from cart!",
+                    icon: "success",
+                    button: "Ok!",
+                  }).then(()=>{
+                    location.reload();
+                  });  
                 
-                location.reload()
+                
             }
             
         }
@@ -87,6 +109,18 @@ function removeCartItem(cartId,prodId){
             alert(response)
             console.log(response,"======response checkout form in ajax========");
             if(response.codSuccess){
+                $.ajax({
+                    url:'/stock-reduce',
+                    data:{
+                        products:JSON.stringify(response.products)
+                    },
+                    method:'post',
+                    success:(response)=>{
+                        if(response.stockReduce){
+                            location.href="/order-success"
+                        }
+                    }
+                })
                 location.href="/order-success"
             }
             else{
@@ -144,11 +178,63 @@ function removeCartItem(cartId,prodId){
                 location.href="/order-success"
             }
             else{
-                alert("Payment Failed")
+                swal({
+                    title: "Failure!",
+                    text: "Payment Failed!",
+                    icon: "error",
+                    button: "Ok!",
+                  })
             }
         }
     })
  }
 
+
+ function deleteAddress(userId,addressid){
+    console.log("ID checks",userId,addressid);
+    $.ajax({
+        url:'/delete-address',
+        data:{
+            user:userId,
+            address:addressid
+        },
+        method:'post',
+        success:(response)=>{
+            console.log(response);
+            if(response.deleteAddress){
+                location.reload();
+            }
+            else{
+                
+            }
+           
+        }
+    })
+ }
+
+ function updateDeliveryStatus(value,orderId,prodId){
+    console.log(value,orderId,prodId,"checking parameters")
+
+    $.ajax({
+        url:'/admin/product-status',
+        data:{
+            order:orderId,
+            product:prodId,
+            changeValue:value
+        },
+        method:'post',
+        success:(response)=>{
+            swal({
+                title: "Status Updated!",
+                text: "Delivery status updated!",
+                icon: "success",
+                button: "Ok!",
+              }).then(()=>{
+                location.reload();
+              });
+            
+        }
+    })
+ }
  
  

@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="container my-4">
+        <a class="btn btn-primary " href="/admin/add-coupon">Add Coupon</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Coupon Name</th>
+                <th scope="col">Coupon Type</th>
+                <th scope="col">Discount Value</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Days left</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each coupon}}
+            <tr>
+                <th scope="row">{{@index}}</th>
+                <td>{{this.couponName}}</td>
+                <td>{{this.couponType}}</td>
+                <td>{{this.couponvalue}}</td>
+                <td>{{this.couponStartDate}}</td>
+                <td>{{this.couponEndDate}}</td>
+                <td>{{this.daysLeft}}</td>
+                <td>{{this.Status}}</td>
+                <td><a href="/admin/edit-coupon?id={{this._id}}"><i class="btn btn-primary bi bi-pencil-square my-1" ></i></a>
+                    <a href="/admin/delete-coupon?id={{this._id}}"><i class="btn btn-danger bi bi-trash my-1" onclick="return confirm('Are you sure you want to delete this coupon?')"></i></a></td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>

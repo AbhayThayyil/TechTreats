@@ -1,0 +1,67 @@
+<div class="container mt-5">
+    <form action="/admin/edit-coupon?id={{couponData._id}}" method="post">
+        <div class="form-group my-2">
+            <label for="couponName">Coupon Name</label>
+            <input type="text" name="couponName" class="form-control" id="couponName"
+                value="{{couponData.couponName}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="couponDescription">Coupon Description</label>
+            <input type="text" name="couponDescription" class="form-control" id="couponDescription"
+                value="{{couponData.couponDescription}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="couponType">Select Coupon Type</label>
+            <select class="form-control" name="couponType" id="couponType" value="{{couponData.couponType}}">
+                <option>Percentage Discount</option>
+                <option>Amount Discount</option>
+            </select>
+        </div>
+        <div class="form-group my-2">
+            <label for="couponValue">Coupon Value</label>
+            <input type="number" name="couponvalue" class="form-control" id="couponvalue"
+                value="{{couponData.couponvalue}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="couponStartDate">Start Date</label>
+            <input type="date" name="couponStartDate" class="form-control" id="couponStartDate"
+                value="{{couponData.couponStartDate}}" required>
+        </div>
+        <div class="form-group my-2">
+            <label for="couponEndDate">End Date</label>
+            <input type="date" name="couponEndDate" class="form-control" id="couponEndDate"
+                value="{{couponData.couponEndDate}}" required>
+        </div>
+        <div class="form-group my-2">
+            <label for="maxAmount">Maximum Purchase Amount</label>
+            <input type="number" name="maxAmount" class="form-control" id="maxAmount"
+                value="{{couponData.maxAmount}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="usageLimit">Usage Limit</label>
+            <input type="number" name="usageLimit" class="form-control" id="usageLimit"
+                value="{{couponData.usageLimit}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="usageLimitUser">Usage Limit per customer</label>
+            <input type="number" name="usageLimitUser" class="form-control" id="usageLimitUser"
+                value="{{couponData.usageLimitUser}}">
+        </div>
+        <div class="form-group my-2">
+            <label for="couponType">Status</label>
+            <select class="form-control" name="Status" id="couponType" value="{{couponData.Status}}">
+                <option>Enable</option>
+                <option>Disable</option>
+            </select>
+        </div>
+        <div class="form-group my-2">
+            <label for="noOfItems">Number of Items coupon can be applied on</label>
+            <input type="number" name="noOfItems" class="form-control" id="noOfItems"
+                value="{{couponData.noOfItems}}">
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mt-4">Save Coupon</button>
+        </div>
+        
+    </form>
+</div>

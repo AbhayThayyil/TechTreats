@@ -43,7 +43,25 @@
 							<a href="/user-signup" data-toggle="" data-target="" class="">
 								<i class="fas fa-sign-out-alt mr-1"></i>Register </a>
 						</li>
+						{{#if userInSession}}
+						<li>
+							<div class="dropdown">
+								<button class="fa fa-user btn btn-info btn-sm dropdown-toggle ml-3" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false">
+									 {{userInSession.name}}
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="/user-profile">Profile</a>
+									
+								</div>
+						</li>
+						{{/if}}
+					</div>
 					</ul>
+					
+					
+
+
 					<!-- //header lists -->
 				</div>
 			</div>
@@ -230,6 +248,11 @@
 							<div class="cart-store">
 								<a href="checkout.html"><i class="far fa-heart"></i></a>
 							</div>
+
+							<div class="cart-store">
+								<a href="/view-orders"><i class="fa fa-shopping-bag" aria-hidden="true"></i></a>
+							</div>
+							
 							<div class="wthreecartaits wthreecartaits2 cart cart box_1">
 								<form action="#" method="post" class="last text-right">
 									<input type="hidden" name="cmd" value="_cart">
@@ -247,6 +270,9 @@
 									
 								</form>
 							</div>
+
+							
+
 						</div>
 						<!-- //cart details -->
 					</div>
@@ -261,20 +287,29 @@
 		<div class="container">
 			<nav class="navbar navbar-expand-lg navbar-light">
 				<div class="agileits-navi_search">
-					<form action="#" method="post">
-						<select id="agileinfo-nav_search" name="agileinfo_search" required="">
-							<option value="">All Categories</option>
-							<option value="Televisions">Laptops</option>
-							<option value="Headphones">Smartwatches</option>
-							<option value="Computers">Mobiles</option>
-							<option value="Appliances">TVs</option>
-							{{!-- <option value="Mobiles">Mobiles</option>
-							<option value="Fruits &amp; Vegetables">Tv &amp; Video</option>
-							<option value="iPad & Tablets">iPad & Tablets</option>
-							<option value="Cameras & Camcorders">Cameras & Camcorders</option>
-							<option value="Home Audio & Theater">Home Audio & Theater</option> --}}
-						</select>
-					</form>
+					{{!-- <ul class="dropdown">
+						
+						<li><a class="dropdown-item" href="/get-Category-products/{{this.category}}">{{this.category}}</a></li>
+						<li><a class="dropdown-item" href="/get-Category-products/{{this.category}}">{{this.category}}</a></li>
+						<li><a class="dropdown-item" href="/get-Category-products/{{this.category}}">{{this.category}}</a></li>
+						<li><a class="dropdown-item" href="/get-Category-products/{{this.category}}">{{this.category}}</a></li>
+						
+					</ul> --}}
+
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false">
+							All Categories
+						</button>
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							<a class="dropdown-item" href="/">All Categories</a>
+							{{#each categories}}
+							<a class="dropdown-item" href="/category-products?name={{this.name}}">{{this.name}}</a>
+							{{/each}}
+						</div>
+					</div>
+
+
 				</div>
 				<button class="navbar-toggler" type="button" data-toggle="collapse"
 					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

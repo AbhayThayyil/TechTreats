@@ -3,6 +3,7 @@ var adminHelper=require('../helpers/admin-helpers')
 var userHelper=require('../helpers/user-helpers')
 const categoryHelper=require('../helpers/category-helpers')
 const inventoryHelper=require('../helpers/inventory-helpers')
+const couponHelper=require('../helpers/coupon-helpers')
 
 
 
@@ -43,10 +44,11 @@ module.exports={
     //admin-view-products  
     adminViewProducts:(req,res)=>{
         productHelper.getAllProducts().then((products)=>{
+            let images=products.image
 
             // console.log("=================all products after getallproducts in viewproducts==============");
            
-            res.render('admin/view-products',{layout:'admin-layout',admin:true,products,adminInSession:req.session.admin})
+            res.render('admin/view-products',{layout:'admin-layout',admin:true,products,adminInSession:req.session.admin,images})
         })
         .catch((error)=>{
             console.log(error);
@@ -181,11 +183,48 @@ module.exports={
 
     adminViewOrders:async(req,res)=>{
         let orderDetails=await adminHelper.adminGetOrders()
+        
         console.log(orderDetails,"check order details");
-        res.render('admin/admin-view-orders',{orderDetails,adminInSession:req.session.admin},)
+        res.render('admin/admin-view-orders',{orderDetails,adminInSession:req.session.admin,admin:true,adminInSession:req.session.admin,layout:'admin-layout'},)
     },
 
+    viewAdminProductCards:async(req,res)=>{
+        let orderId=req.query.id
+        console.log(orderId,"===order id===");
+        let totalOrderDetails=await userHelper.getProducts(orderId)
+        let totalPaid=totalOrderDetails[0].totalPrice
+        console.log(totalOrderDetails);
+
+        res.render('admin/admin-order-cards',{admin:true,adminInSession:req.session.admin,totalOrderDetails,totalPaid})
+    },
+    //add-coupon-get
+    addCoupon:(req,res)=>{
+        res.render('admin/add-coupon',{admin:true,layout:'admin-layout',adminInSession:req.session.admin})
+    },
+
+    //view coupon-coupon management
+    viewCoupon:async(req,res)=>{
+        let coupon=await couponHelper.doViewCoupon()
+        console.log(coupon);
+        res.render('admin/coupon-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,coupon})
+    },
     
+    //edit coupon get
+
+    editCoupon:async(req,res)=>{
+        let couponId=req.query.id
+        let couponData=await couponHelper.getCouponData(couponId)
+        res.render('admin/edit-coupon',{layout:'admin-layout',adminInSession:req.session.admin,couponData})
+    },
+
+    //delete coupon get
+    deleteCoupon:(req,res)=>{
+        let couponId=req.query.id
+        couponHelper.doDeleteCoupon(couponId).then(()=>{
+            res.redirect('/admin/view-coupons')
+        })
+
+    },
     
 
            
@@ -231,32 +270,39 @@ module.exports={
     //add-product-post
     postAddProduct:(req,res)=>{
 
-        // console.log(req.body);
+        
         // console.log(req.files);
+        let image=[]
+            req.files.forEach((value,index)=>{
+                image.push(value.filename)
+            })
+            req.body.image=image
+            
+             console.log(req.body);
 
         productHelper.addProduct(req.body,(id)=>{
-            let image=req.files.image
-            let image2=req.files.image2
-            let image3=req.files.image3
-            let image4=req.files.image4
+            
+                // res.json({response:"/admin/view-products"})
+                res.redirect('view-products')
 
-            image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
-                image2.mv('./public/product-images2/'+id+'.jpg',(err,done)=>{
-                    image3.mv('./public/product-images3/'+id+'.jpg',(err,done)=>{
-                        image4.mv('./public/product-images4/'+id+'.jpg',(err,done)=>{
+            
+
+            // let image=req.files.image
+            // let image2=req.files.image2
+            // let image3=req.files.image3
+            // let image4=req.files.image4
+
+            // image.mv('./public/product-images/'+id+'.jpg',(err,done)=>{
+            //     image2.mv('./public/product-images2/'+id+'.jpg',(err,done)=>{
+            //         image3.mv('./public/product-images3/'+id+'.jpg',(err,done)=>{
+            //             image4.mv('./public/product-images4/'+id+'.jpg',(err,done)=>{
                             
-                            if(!err){
-                                // res.json({response:"/admin/view-products"})
-                                res.redirect('view-products')
-                            }
-                            else{
-                                console.log(err);
-                            }
-                        })
-                    })
-                })
+                            
+            //             })
+            //         })
+            //     })
                 
-            })
+            // })
             
         })
     },
@@ -265,27 +311,18 @@ module.exports={
 
     postEditProduct:(req,res)=>{
         let id=req.params.id
+        let image=[]
+        req.files.forEach((value,index)=>{
+            image.push(value.filename)
+        })
+        req.body.image=image
+        // console.log(req.body,"req.body in posteditprod");
         productHelper.updateProduct(req.params.id,req.body).then(()=>{
 
             // console.log(req.params.id);
 
             res.redirect('/admin/view-products')
-            if(req.files.image){
-                let image=req.files.image
-                image.mv('./public/product-images/'+id+'.jpg')
-            }
-            if(req.files.image2){
-                let image2=req.files.image2
-                image2.mv('./public/product-images2/'+id+'.jpg')
-            }
-            if(req.files.image3){
-                let image3=req.files.image3
-                image3.mv('./public/product-images3/'+id+'.jpg')
-            }
-            if(req.files.image4){
-                let image4=req.files.image4
-                image4.mv('./public/product-images4/'+id+'.jpg')
-            }
+            
         }).catch((error)=>{
             console.log(error);
         })
@@ -296,18 +333,18 @@ module.exports={
 
     //post-add category
     postAddCategory:(req,res)=>{
-        // console.log(req.body,"what i enetered");
+        //  console.log(req.body,"what i enetered");
         
         categoryHelper.addCategory(req.body).then((response)=>{
 
-            if(!response.status){
-                
-                req.session.catExists="The entered category already exists.Enter another."
-                res.redirect("/admin/add-category")
+            // console.log(response,"response check in controller");
+            if(response.status){
+                res.redirect("/admin/view-categories")
             }
             // console.log(response,"===================response check of category add=============");
             else{
-                res.redirect("/admin/view-categories")
+                req.session.catExists="The entered category already exists.Enter another."
+                res.redirect("/admin/add-category")
             }
             
         }).catch((error)=>{
@@ -334,7 +371,51 @@ module.exports={
         inventoryHelper.doAddStock(req.body).then(()=>{
             res.redirect('/admin/view-inventory')
         })
-    }
+    },
+    //update order status
+
+    updateStatus:(req,res)=>{
+        // console.log("is it working");
+        productHelper.changeOrderStatus(req.body).then((response)=>{
+            res.json(response)
+        })
+    },
+    //add coupon post
+    postAddCoupon:(req,res)=>{
+        console.log(req.body,"what is in coupon body");
+        req.body.couponvalue=parseInt(req.body.couponvalue)
+        req.body.couponStartDate=new Date(req.body.couponStartDate)
+        req.body.couponEndDate=new Date(req.body.couponEndDate)
+        req.body.minAmount=parseInt(req.body.minAmount)
+        req.body.maxAmount=parseInt(req.body.maxAmount)
+        req.body.usageLimit=parseInt(req.body.usageLimit)
+        req.body.usageLimitUser=parseInt(req.body.usageLimitUser)
+        req.body.noOfItems=parseInt(req.body.noOfItems)
+
+        couponHelper.doAddCoupon(req.body).then(()=>{
+            res.redirect('/admin/view-coupons')
+        })
+    },
+
+    //post edit coupon
+    postEditCoupon:(req,res)=>{
+
+        let couponId=req.query.id
+        req.body.couponvalue=parseInt(req.body.couponvalue)
+        req.body.couponStartDate=new Date(req.body.couponStartDate)
+        req.body.couponEndDate=new Date(req.body.couponEndDate)
+        req.body.minAmount=parseInt(req.body.minAmount)
+        req.body.maxAmount=parseInt(req.body.maxAmount)
+        req.body.usageLimit=parseInt(req.body.usageLimit)
+        req.body.usageLimitUser=parseInt(req.body.usageLimitUser)
+        req.body.noOfItems=parseInt(req.body.noOfItems)
+
+        couponHelper.doEditCoupon(couponId,req.body).then(()=>{
+            res.redirect('/admin/view-coupons')
+        })
+    },
+
+    
 
 
  }
