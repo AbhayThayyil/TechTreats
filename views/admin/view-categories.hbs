@@ -32,5 +32,12 @@
                 {{/each}}
             </tbody>
         </table>
+        <div class="text-center my-3">
+            <a href="?page={{previous}}">Previous</a>
+            {{#iterateTimes totalPages}}
+        <a href="?page={{this}}">{{this}}</a>
+            {{/iterateTimes}}
+            <a href="?page={{next}}">Next</a>
+        </div>
     </div>
 </section>

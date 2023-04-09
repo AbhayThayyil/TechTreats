@@ -1,5 +1,5 @@
 var express = require('express');
-const { viewProducts, userSignUp, userLogin, postUserSignUp, postUserLogin, userLogout, showProductDetail, otpLogin, postOtpLogin, verifyOtp, postVerifyOtp, getCart, addToCart, changeProductQuantity, removeTheCartItem, showCheckout, postCheckout, orderSuccess, viewOrders, viewProductCards, doVerifyPayment, viewCategoryProducts, viewProductsCategoryWise, userProfile, addAddress, deleteAddress, deleteAddresses, showCoupons, submitCoupon, stockReduce, cancelOrder, orderReturn } = require('../controllers/user-controller');
+const { viewProducts, userSignUp, userLogin, postUserSignUp, postUserLogin, userLogout, showProductDetail, otpLogin, postOtpLogin, verifyOtp, postVerifyOtp, getCart, addToCart, changeProductQuantity, removeTheCartItem, showCheckout, postCheckout, orderSuccess, viewOrders, viewProductCards, doVerifyPayment, viewCategoryProducts, viewProductsCategoryWise, userProfile, addAddress, deleteAddress, deleteAddresses, showCoupons, submitCoupon, stockReduce, cancelOrder, orderReturn, showWallet, otpTesting, paypalSuccess, getAddressFromDropdown } = require('../controllers/user-controller');
 var router = express.Router();
 const userController=require('../controllers/user-controller')
 var productHelper=require('../helpers/product-helpers');
@@ -48,6 +48,9 @@ router.get('/user-logout',userLogout)
 // router.get('/product-detail/',showProductDetail)
 router.get('/product-detail/',showProductDetail)
 
+// To post review by user
+router.post('/submit-review',verifyLogin,userController.submitReview)
+
 //******************************************  CART  *********************************
 
 //cart
@@ -73,9 +76,20 @@ router.post('/change-product-quantity',changeProductQuantity)
 router.get('/checkout',verifyLogin,showCheckout)
 router.post('/checkout',postCheckout)
 
+// To select address from dropdown list
+
+router.get('/select-address/:id',verifyLogin,getAddressFromDropdown)
 //order-success-page
 
 router.get('/order-success',verifyLogin,orderSuccess)
+
+//order-fail-page
+
+router.get('/order-fail',verifyLogin,userController.orderFail)
+
+//order-success=paypal
+
+router.get('/paypal-order-success/:id',verifyLogin,paypalSuccess)
 
 //order-list
 
@@ -88,8 +102,19 @@ router.get('/view-product-cards/:id',verifyLogin,viewProductCards)
 //verify payment
 router.post('/verify-payment',verifyLogin,doVerifyPayment)
 
-//user-profile
+//user-profile,edit-credentials,edit basic data,edit important data
 router.get('/user-profile',verifyLogin,userProfile)
+
+router.get('/edit-credentials',verifyLogin,userController.editUserCredentials)
+
+router.get('/edit-basic-user-data',verifyLogin,userController.editBasicCreds)
+router.post('/edit-basic-user-data',verifyLogin,userController.postEditedBasicCreds)
+
+router.get('/edit-important-user-data',verifyLogin,userController.editImportantCreds)
+router.post('/edit-important-user-data',verifyLogin,userController.postEditedImportantCreds)
+
+//user-wallet
+router.get('/user-wallet',verifyLogin,showWallet)
 
 //user-add-address
 router.post('/submit-address',verifyLogin,addAddress)

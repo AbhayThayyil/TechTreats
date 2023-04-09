@@ -1,0 +1,87 @@
+<div class="container " >
+    <div class="mx-5 mt-4 col-md-8 " >
+        <h3>Banner Addition</h3>
+
+        <form action="/admin/add-banner" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="banner-name">Banner Name</label>
+                <input type="text" class="form-control" name="bannerName" id="banner-name" aria-describedby=""
+                    placeholder="Enter Banner name">
+            </div>
+            
+
+            <div class="form-group">
+                <label for="banner-description1">Banner Description 1</label>
+                <input type="text" class="form-control" name="bannerDescription1" id="banner-description1" aria-describedby=""
+                    placeholder="Enter Banner Description" required>
+            </div>
+            <div class="form-group">
+                <label for="banner-image1">Banner Image 1</label>
+                <input type="file" class="form-control" name="bannerImage1" id="banner-image1" placeholder="Upload Image" required>
+            </div>
+            <div class="form-group">
+                            <label for="">Category1</label>
+                            <select id="product-category1" name="category1" class="form-select" aria-label="Default select example" required>
+                            
+                            {{#each categories}}
+                            <option name="category1" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                            
+                            </select>
+            </div>
+
+            <div class="form-group">
+                <label for="banner-description2">Banner Description 2</label>
+                <input type="text" class="form-control" name="bannerDescription2" id="banner-description2" aria-describedby=""
+                    placeholder="Enter Banner Description">
+            </div>
+            <div class="form-group">
+                <label for="banner-image2">Banner Image 2</label>
+                <input type="file" class="form-control" name="bannerImage2" id="banner-image2" placeholder="Upload Image" required>
+            </div>
+            <div class="form-group">
+                            <label for="">Category2</label>
+                            <select id="product-category2" name="category2" class="form-select" aria-label="Default select example" required>
+                            
+                            {{#each categories}}
+                            <option name="category2" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                            
+                            </select>
+            </div>
+
+            <div class="form-group">
+                <label for="banner-description3">Banner Description 3</label>
+                <input type="text" class="form-control" name="bannerDescription3" id="banner-description3" aria-describedby=""
+                    placeholder="Enter Banner Description" required>
+            </div>
+            <div class="form-group">
+                <label for="banner-image3">Banner Image 3</label>
+                <input type="file" class="form-control" name="bannerImage3" id="banner-image3" placeholder="Upload Image" required>
+            </div>
+            <div class="form-group">
+                            <label for="">Category3</label>
+                            <select id="product-category" name="category3" class="form-select" aria-label="Default select example" required>
+                            
+                            {{#each categories}}
+                            <option name="category3" value="{{this.name}}">{{this.name}}</option>
+                            {{/each}}
+                            
+                            </select>
+            </div>
+
+            <div class="form-group">
+                <label for="banner-description4">Banner Description 4</label>
+                <input type="text" class="form-control" name="bannerDescription4" id="banner-description4" aria-describedby=""
+                    placeholder="Enter Banner Description" required>
+            </div>
+            <div class="form-group">
+                <label for="banner-image4">Banner Image 4</label>
+                <input type="file" class="form-control" name="bannerImage4" id="banner-image4" placeholder="Upload Image" required>
+            </div>
+            
+
+            <button type="submit" class="btn btn-primary mt-4">Submit</button>
+        </form>
+    </div>
+</div>

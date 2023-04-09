@@ -36,7 +36,7 @@
     <link rel="canonical" href="https://themeselection.com/products/sneat-bootstrap-html-admin-template/">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="../admin-files/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="./admin-files/assets/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,6 +66,10 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="../admin-files/assets/js/config.js"></script>
+
+    {{!-- export to excel script  --}}
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
     
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
@@ -126,6 +130,12 @@
 
   {{!-- image cropper crop guide --}}
  <script defer src="https://cdn.crop.guide/loader/l.js?c=SBMKBR"></script>
+
+ {{!-- CHART.JS --}}
+
+  <script
+  src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
 
   
 

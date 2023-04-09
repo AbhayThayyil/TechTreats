@@ -100,10 +100,8 @@ label {
     --shadow-color: rgb(0 0 0 / 3%);
     --box-shadow: rgb(0 0 0 / 41%);
     --iframe-filter: grayscale(0%);
-    --banner-1: url(../images/banner1.png) no-repeat center;
-    --banner-2: url(../images/banner2.png) no-repeat center;
-    --banner-3: url(../images/banner3.png) no-repeat center;
-    --banner-4: url(../images/banner4.png) no-repeat center;
+    
+    
 }
 
 [data-theme="dark"] {

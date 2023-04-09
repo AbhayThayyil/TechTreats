@@ -1,12 +1,12 @@
 var db=require('../config/connection')
-var collection=require('../config/collection')
+var collection=require('../config/collection');
+const { COUPON_COLLECTION } = require('../config/collection');
 var objectId=require('mongodb').ObjectId
 
 module.exports={
     doAddCoupon:(couponData)=>{
         console.log(couponData,"what is in couponData in helpers");
-        couponData.daysLeft=Math.round((couponData.couponEndDate-new Date())/(1000 * 3600 * 24))
-
+        
         
         return new Promise((resolve,reject)=>{
             try {
@@ -21,12 +21,31 @@ module.exports={
             
         })
     },
-    doViewCoupon:()=>{
+
+    doViewCouponOnly:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let coupon=await db.get().collection(collection.COUPON_COLLECTION).find()
+            .toArray()
+            resolve(coupon)
+        })
+    },
+    doViewCoupon:(pageNumber)=>{
         return new Promise(async(resolve,reject)=>{
             try {
-                let coupon=await db.get().collection(collection.COUPON_COLLECTION).find().toArray()
+                
+            const prodLimit=5;
+            let coupon=await db.get().collection(collection.COUPON_COLLECTION).find()
+            .skip((pageNumber-1)*prodLimit).limit(prodLimit).toArray()
             
-            resolve(coupon)
+            const totalCoupons=await db.get().collection(collection.COUPON_COLLECTION).countDocuments();
+            const totalPages=Math.ceil(totalCoupons/prodLimit)
+            
+            let couponObj={
+                coupon:coupon,
+                totalCoupons:totalCoupons,
+                totalPages:totalPages
+            }
+            resolve(couponObj)
             } catch (error) {
                 let err={}
                 err.message="Something went wrong "
@@ -104,28 +123,72 @@ module.exports={
         })
     },
 
-    isCoupon:(couponName)=>{
+    enterCoupon:(couponData)=>{
+        let couponName=couponData.coupon
+        let userId=couponData.userId
         console.log(couponName,"what is coupon name");
         return new Promise(async(resolve,reject)=>{
             
             let couponExist=await db.get().collection(collection.COUPON_COLLECTION).findOne({couponName:couponName})
-            // console.log(couponExist,"what is in coupon exist");
-            if(couponExist!=null){
-                let couponValid=await db.get().collection(collection.COUPON_COLLECTION)
-                .findOne({_id:couponExist._id,couponEndDate:{$gte:new Date()},couponStartDate:{$lte:new Date()},Status:'Enable'})
-                // console.log(couponValid,"valid coupon attibutes");
-                if(couponValid!=null){
-                    resolve(couponValid)
+            console.log(couponExist,"what is the data if coupon exist");
+            if(couponExist){
+
+                // 1.Check if the user already used this coupon
+                if(couponExist.usedBy.includes(userId)){
+                    console.log("This user already used coupon");
+                    reject({couponError:"This user already used coupon"})
+                }
+                else if(couponExist.validFrom > new Date() || couponExist.validTill < new Date()){
+                    console.log("This coupon cannot be used due to validity issue");
+                    reject({couponError:"This coupon cannot be used due to validity issue"})
+                }
+                else if(couponExist.maxUses < 1){
+                    console.log("No more uses left");
+                    reject({couponError:"No more uses left"})
+                }
+                else if (couponExist.Status=="Disable"){
+                    reject({couponError:"Coupon Disabled"})
                 }
                 else{
-                    console.log('expired coupon');
-                    reject({couponExpired:true})
-                }   
+                    console.log("This user have not used this coupon");
+                    let totalPrice=couponData.totalPrice
+                    let discountPercent=couponExist.discountPercent
+                    let discountPrice=Math.round(totalPrice*(discountPercent/100))
+                    let finalPrice=totalPrice-discountPrice
+                    let priceObj={
+                        totalPrice:totalPrice,
+                        discountPrice:discountPrice,
+                        finalPrice:finalPrice
+                    }
+
+                    
+                    resolve({priceObj,couponSuccess:"Coupon added"})
+                   
+                    
+                }
+                // console.log(couponValid,"valid coupon attibutes");
+                // if(couponValid!=null){
+                //     resolve(couponValid)
+                // }
+                // else{
+                //     console.log('expired coupon');
+                //     reject({couponExpired:true})
+                // }   
             }   
             else{
-                reject({Invalid:true})
+                reject({couponError:"Coupon does not exist"})
             }
             
+        })
+    },
+
+    updateCouponStatus:(couponName,userId)=>{
+        
+        return new Promise((resolve,reject)=>{
+            db.get().collection(collection.COUPON_COLLECTION).updateOne({couponName:couponName},{$inc:{maxUses:-1}}).then(()=>{
+                        db.get().collection(collection.COUPON_COLLECTION).updateOne({couponName:couponName},{$push:{usedBy:userId}})
+                    })
+                    resolve()
         })
     }
 }

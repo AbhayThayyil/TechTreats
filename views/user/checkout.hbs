@@ -1,279 +1,328 @@
-<style>
-	@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');body{background-color: #eeeeee;font-family: 'Open Sans',serif;font-size: 14px}.container-fluid{margin-top:70px}.card-body{-ms-flex: 1 1 auto;flex: 1 1 auto;padding: 1.40rem}.img-sm{width: 80px;height: 80px}.itemside .info{padding-left: 15px;padding-right: 7px}.table-shopping-cart .price-wrap{line-height: 1.2}.table-shopping-cart .price{font-weight: bold;margin-right: 5px;display: block}.text-muted{color: #969696 !important}a{text-decoration: none !important}.card{position: relative;display: -ms-flexbox;display: flex;-ms-flex-direction: column;flex-direction: column;min-width: 0;word-wrap: break-word;background-color: #fff;background-clip: border-box;border: 1px solid rgba(0,0,0,.125);border-radius: 0px}.itemside{position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;width: 100%}.dlist-align{display: -webkit-box;display: -ms-flexbox;display: flex}[class*="dlist-"]{margin-bottom: 5px}.coupon{border-radius: 1px}.price{font-weight: 600;color: #212529}.btn.btn-out{outline: 1px solid #fff;outline-offset: -5px}.btn-main{border-radius: 2px;text-transform: capitalize;font-size: 15px;padding: 10px 19px;cursor: pointer;color: #fff;width: 100%}.btn-light{color: #ffffff;background-color: #F44336;border-color: #f8f9fa;font-size: 12px}.btn-light:hover{color: #ffffff;background-color: #F44336;border-color: #F44336}.btn-apply{font-size: 11px}
-</style>
-
-
-
-<div class="col-md-12 ">
-	<form action="/checkout" method="post" class="" id="checkout-form">
-
-	<div class="container">
-		
-			<div class="col-md-12 ">
-				
-          <div class="mt-5 mb-5  ">
-			<div class="row ">
-            {{#each address }}
-            <div class="card mt-5 mb-2 mx-5 " style="width: 18rem;">
-            <div class="card-header text-center">
-              Saved Address
-            </div>
-			<input type="radio"  name="addressId" value="{{this.addressid}}"  >
-            <ul class="list-group list-group-flush"> 
-              <li class="list-group-item">Address: {{this.address}} </li>
-              <li class="list-group-item">City: {{this.city}}</li>
-              <li class="list-group-item">Pin Code: {{this.pincode}}</li>
-              <li class="list-group-item">Mobile: {{this.mobile}}</li>
-               
-            </ul>
-          </div>
-          
-          {{/each}}
-
-		  
-          </div>
-          </div>
-		  <div class="text-center">
-				<a href="/user-profile" class="btn btn-primary ">Add another Address</a>
-		  </div>
-		  
-        </div>
-		<input type="text" name="userId" id="" value="{{userInSession._id}}" hidden>
-		
-	
-</div>
-
-	<div class="row text-center">
-		
-		<div class="col-md-12 text-center mt-5 border border-2">
-			<h4 class="mb-4 font-weight-bold">Payment</h4>
-			<div class="d-block mt-3 ">
-				<div>
-					<div class="custom-control custom-radio mb-2">
-						<input id="credit" name="payment-method" type="radio" class="custom-control-input" value="COD" checked=""
-							>
-						<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
+<div class="container mt-5">
+	<form action="/checkout" method="post" id="checkout-form">
+		<div class="row">
+			<div class="col-md-8 mb-4">
+				<div class="card mb-4">
+					<div class="card-header py-3">
+						<h5 class="mb-0">Biling details</h5>
 					</div>
-					<div class="custom-control custom-radio mb-2">
-						<input id="debit" name="payment-method" type="radio" class="custom-control-input" value="ONLINE" >
-						<label class="custom-control-label" for="debit">Razor Pay</label>
+					<div class="card-body">
+
+						<div class="form-group">
+								<label for="demo_overview">Add from Existing Address *</label>
+								<select onchange="selectedAddress()"  id="address" class="form-control"
+									data-role="select-dropdown" required>
+									<!-- options -->
+									<option selected value="{{this.addressid}}">Add from Existing Address</option>
+
+									{{#each address}}
+
+
+									<option value="{{this.addressid}}">Address:{{this.address}},{{this.city}},{{this.pincode}},Mob:{{this.mobile}}</option>
+
+									{{/each}}
+
+
+
+								</select>
+							</div>
+
+						
+
+						<!-- Text input -->
+						<div class="form-outline mb-4">
+							<input type="text" id="faddress" name="address" class="form-control" />
+							<label class="form-label" for="faddress">Address</label>
+						</div>
+
+						<!-- Text input -->
+						<div class="form-outline mb-4">
+							<input type="text" id="fcity" name="city" class="form-control" />
+							<label class="form-label" for="fcity">City</label>
+						</div>
+
+						<!-- Number input -->
+						<div class="form-outline mb-4">
+							<input type="number" id="fpincode" name="pincode" class="form-control" />
+							<label class="form-label" for="fpincode">Pin Code</label>
+						</div>
+
+						<!-- Number input -->
+						<div class="form-outline mb-4">
+							<input type="number" id="fmobile" name="mobile" class="form-control" />
+							<label class="form-label" for="fmobile">Phone</label>
+						</div>
+
+						<input type="text" name="userId" id="" value="{{userInSession._id}}" hidden>
+						
+						
+
+						
+
 					</div>
-
-					<div class="mt-5">
-						<h3 class="font-weight-bold"  > Total:₹ <span id="totalAmount">{{total}}</span></h3>
-					</div>
-
-					<div class="cart_coupon mt-5">
-	
-				
-			
-	</div>
-
-					<div class="checkout-right-basket ">
-					<button type="submit" class="check_out btn btn-success text-white font-weight-bold">MAKE A PAYMENT
-						<span class="far fa-hand-point-right"></span>
-					</button>
-				</div>
 				</div>
 			</div>
-		</div>
-	</div>
 
-	
-
-	</form>
-
-	<div class="form-group text-center mt-2"> <label>Have coupon?</label>
-					        <div class="input-group">
-                            <input type="text" class="form-control" id="couponName" placeholder="Enter Coupon Code">
-							
-							<button  class="btn btn-primary btn-apply  coupon" onclick="applyCoupon()">Apply</button>
-							
-							
-					        </div>
-							<div id="coupon-success" style="color: green;"></div>
-							<div id="coupon-error" style="color: red;"></div>
-				</div>
-</div>
-
-
-
-
-
-
-
-
-
-{{!-- <div>
-	<div class="row">
-		<div class="container col-md-6 mx-5">
-			<div class="row"></div>
-			<div class="checkout-left">
-				<div class="address_form_agile mt-sm-5 mt-4">
-					<h4 class="mb-sm-4 mb-3">Add a new Details</h4>
-					<form action="payment.html" method="post" class="" id="checkout-form">
-						<div class="creditly-wrapper wthree, w3_agileits_wrapper">
-							<div class="information-wrapper">
-								<div class="first-row">
-									<div class="controls form-group">
-										<input class="billing-address-name form-control" type="text" name="name"
-											placeholder="Full Name" >
-									</div>
-									<div class="w3_agileits_card_number_grids">
-										<div class="w3_agileits_card_number_grid_left form-group">
-											<div class="controls">
-												<input type="text" class="form-control" placeholder="Mobile Number"
-													name="number" >
-											</div>
-										</div>
-										<div class="w3_agileits_card_number_grid_right form-group">
-											<div class="controls">
-												<input type="text" class="form-control" placeholder="Landmark"
-													name="landmark" >
-											</div>
-										</div>
-									</div>
-									<div class="controls form-group">
-										<input type="text" class="form-control" placeholder="Town/City" name="city"
-											>
-									</div>
-									<div class="controls form-group">
-										<select class="option-w3ls">
-											<option>Select Address type</option>
-											<option>Office</option>
-											<option>Home</option>
-											<option>Commercial</option>
-
-										</select>
-									</div>
+			<div class="col-md-4 mb-4">
+				<div class="card mb-4">
+					<div class="card-header py-3">
+						<h5 class="mb-0">Summary</h5>
+					</div>
+					<div class="card-body">
+						<ul class="list-group list-group-flush">
+							<li
+								class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+								Sub Total
+								<span id="sub-total">₹ {{total}}</span> 
+								<input type="text" name="subTotal" id="subTotal" value="{{total}}" hidden>
+							</li>
+							<li class="list-group-item d-flex justify-content-between align-items-center px-0">
+								Discount
+								<span id="discount-amount">0</span> 
+								<input id="discountAmount" type="text" name="discountAmount" value="0" hidden>
+							</li>
+							<li
+								class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+								<div>
+									<strong>Total Amount</strong>
 								</div>
-								<button class="submit check_out btn">Delivery to this Address</button>
+								<span id="final-total"><strong>₹ {{total}}</strong></span>
+								<input type="text" name="finalPrice" id="finalTotal" value="{{total}}" hidden>
+							</li>
+						</ul>
+
+						<div class="input-group">
+							<input type="text" id="couponName" class="form-control" name="coupon" placeholder="Coupon code">
+							<div class="input-group-append">
+								<button type="button" onclick="applyCoupon()" id="applyButton" class="btn btn-secondary" style="z-index: 0;">Redeem</button>
+								<button type="button" onclick="removeCoupon()" id="removeButton" class="btn btn-secondary" style="z-index: 0;">Remove</button>
+							</div>
+							
+								
+							
+						</div>
+						<div id="coupon-success" style="color: green;"></div>
+						<div id="coupon-error" style="color: red;"></div>
+
+
+
+
+
+						<div class="payment mt-4">
+							<strong><p>Payment Method</p></strong>
+							<div class="custom-control custom-radio mb-2">
+								<input id="credit" name="payment-method" type="radio" class="custom-control-input" value="COD" checked="">
+								<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
+							</div>
+							<div class="custom-control custom-radio mb-2">
+								<input id="debit" name="payment-method" type="radio" class="custom-control-input" value="RazorPay">
+								<label class="custom-control-label" for="debit">Razor Pay</label>
+							</div>
+							<div class="custom-control custom-radio mb-2">
+								<input id="paypal" name="payment-method" type="radio" class="custom-control-input" value="PayPal">
+								<label class="custom-control-label" for="paypal">PayPal</label>
+							</div>
+						
+							<div class="mt-5">
+								<h3 class="font-weight-bold"> Total:₹ <span id="totalAmount">{{total}}</span></h3>
 							</div>
 						</div>
-					</form>
 
+						<button type="submit" class="btn btn-primary btn-lg btn-block">
+							Make a Payment
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
-		<div class="container col-md-3 mt-5 pt-5 border rounded" style="text-align: center">
-			<h4 class="mb-4 font-weight-bold">Payment</h4>
-
-			<div class="d-block mt-3">
-				<div>
-					<div class="custom-control custom-radio mb-2">
-						<input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked=""
-							>
-						<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
-					</div>
-					<div class="custom-control custom-radio mb-2">
-						<input id="debit" name="paymentMethod" type="radio" class="custom-control-input" >
-						<label class="custom-control-label" for="debit">Razor Pay</label>
-					</div>
-
-					<div class="mt-5">
-						<h3 class="font-weight-bold">Total:₹ {{total}}</h3>
-					</div>
-				</div>
-
-
-				<div class="checkout-right-basket ">
-					<a href="payment.html">Make a Payment
-						<span class="far fa-hand-point-right"></span>
-					</a>
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div> --}}
-
-{{!-- custom css --}}
-
-
-
+	</form>
+</div>
 
 
 <script>
-	function applyCoupon(){
-		let couponData=document.getElementById("couponName").value
+	function selectedAddress(){
+		let e=document.getElementById("address")
+		let addressId=e.value
+		console.log(addressId,"This is e  value")
+
+		$.ajax({
+			url:'/select-address/'+addressId,
+			method:'get',
+			success:(response)=>{
+				document.getElementById("faddress").value=response.address,
+				document.getElementById("fcity").value=response.city,
+				document.getElementById("fpincode").value=response.pincode,
+				document.getElementById("fmobile").value=response.mobile
+			}
+		})
+	}
+
+	//payment
+
+$("#checkout-form").submit((e)=>{
+    e.preventDefault() 
+    $.ajax({
+        url:'/checkout',
+        method:'post',
+        data:$('#checkout-form').serialize(),
+        success:(response)=>{
+            alert(response)
+            console.log(response,"======response checkout form in ajax========");
+            if(response.codSuccess){
+                $.ajax({
+                    url:'/stock-reduce',
+                    data:{
+                        products:JSON.stringify(response.products)
+                    },
+                    method:'post',
+                    success:(response)=>{
+                        if(response.stockReduce){
+                            location.href="/order-success"
+                        }
+                    }
+                })
+                location.href="/order-success"
+            }
+            else if(response.razorpaySuccess){               
+                razorpayPayment(response.order)
+            }
+
+			else if (response.paypalSuccess){
+				 console.log("checking reached or not")
+				 console.log(response.linkto,"link to ")
+				 location.replace(response.linkto)
+			}
+        }
+    })
+	
+ })
+
+ function razorpayPayment(order){
+    var options = {
+        "key": "rzp_test_ewNm9lY0xHIOAt", // Enter the Key ID generated from the Dashboard
+        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "Tech Treat",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        "handler": function (response){
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            // alert(response.razorpay_signature)
+
+            verifyPayment(response,order)
+        },
+        "prefill": {
+            "name": "Gaurav Kumar",
+            "email": "gaurav.kumar@example.com",
+            "contact": "9999999999"
+        },
+        "notes": {
+            "address": "Razorpay Corporate Office"
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    rzp1.open()
+ }
+
+
+
+ function verifyPayment(payment,order){
+    $.ajax({
+        url:'/verify-payment',
+        data:{
+            payment,
+            order
+        },
+        method:'post',
+        success:(response)=>{
+            if(response.status){
+                location.href="/order-success"
+            }
+            else{
+                swal({
+                    title: "Failure!",
+                    text: "Payment Failed!",
+                    icon: "error",
+                    button: "Ok!",
+                  })
+            }
+        }
+    })
+ }
+
+
+// Coupon
+
+function applyCoupon(){
+	let couponData=document.getElementById("couponName").value	
 		console.log(couponData,"hiii")
 		let totalPrice=document.getElementById("totalAmount").innerHTML
 		console.log(totalPrice,"totalprice")
 
-if(couponData!=''){
-	$.ajax({
-		url:'/apply-coupon',
-		data:{
-			coupon:couponData
-			
-		},
-		method:'post',
-		success:(response)=>{
-           if(response.Invalid){
-			document.getElementById("coupon-error").innerHTML='Invalid Coupon'
-			setTimeout(()=>{
-				document.getElementById("coupon-error").innerHTML=''
-			},2000)
-		   }
-		   else if(response.couponExpired){
-			document.getElementById("coupon-error").innerHTML='Invalid Coupon'
-			setTimeout(()=>{
-				document.getElementById("coupon-error").innerHTML=''
-			},2000)
-		   }
-		   else{
-			console.log(response)
-			console.log(response.couponvalue)
-			if(response.minAmount > totalPrice){
-						let moreAmount=response.minAmount-totalPrice
-						document.getElementById("coupon-error").innerHTML='Please purchase for ₹ '+moreAmount+ 'to redeem this coupon'
-					setTimeout(()=>{
-						document.getElementById("coupon-error").innerHTML=''
-					},2000)
+		if(couponData){
+			$.ajax({
+				url:'/apply-coupon',
+				data:{
+					coupon:couponData,
+					totalPrice:totalPrice
+				},
+				method:'post',
+				success:(response)=>{
+					if(response.couponError){
+						document.getElementById("coupon-error").innerHTML=response.couponError
+						setTimeout(()=>{
+							document.getElementById("coupon-error").innerHTML=''
+						},2000)
+					}
+					else if(response.couponSuccess){
+						console.log(response)
+						document.getElementById("coupon-success").innerHTML=response.couponSuccess
+						setTimeout(()=>{
+							document.getElementById("coupon-success").innerHTML=''
+						},2000)
+
+
+						
+						
+						
+						
+						
+						document.getElementById("sub-total").innerHTML=response.priceObj.totalPrice
+						document.getElementById("discount-amount").innerHTML=response.priceObj.discountPrice
+						document.getElementById("final-total").innerHTML=response.priceObj.finalPrice
+						document.getElementById("totalAmount").innerHTML=response.priceObj.finalPrice
+
+						document.getElementById("subTotal").value=response.priceObj.totalPrice
+						document.getElementById("discountAmount").value=response.priceObj.discountPrice
+						document.getElementById("finalTotal").value=response.priceObj.finalPrice
+						document.getElementById('applyButton').style.display = 'none'
+						document.getElementById('removeButton').style.display = 'block'
+
+					}
 				}
-			if(totalPrice>response.maxAmount){
-						let moreAmount=totalPrice-response.maxAmount
-						document.getElementById("coupon-error").innerHTML='Please purchase for ₹ '+moreAmount+ ' less to redeem this coupon'
-					setTimeout(()=>{
-						document.getElementById("coupon-error").innerHTML=''
-					},2000)
-				}	
-				
-				
-				if(response.couponType==='Amount Discount'){
-					let discountPrice=totalPrice-response.couponvalue
-					console.log(discountPrice)	
-					let finalPrice=discountPrice
-					document.getElementById("totalAmount").innerHTML=finalPrice
-					document.getElementById("coupon-success").innerHTML='Coupon addedd successfully'
-					setTimeout(()=>{
-						document.getElementById("coupon-success").innerHTML=''
-					},2000)
-				}
-				else{
-					let discountPrice=totalPrice-(totalPrice*(response.couponvalue)/100)
-					console.log(discountPrice)
-					let finalPrice=Math.round(discountPrice)
-					document.getElementById("totalAmount").innerHTML=finalPrice
-				}
-
-
-
-
-
-
-
-		   }
+					
+			})
 		}
-	})		
+
 }
 
+function removeCoupon(){
+	let oldTotal=document.getElementById("sub-total").innerHTML
+	document.getElementById("final-total").innerHTML=oldTotal
+	document.getElementById("discount-amount").innerHTML=0
+	document.getElementById("totalAmount").innerHTML=oldTotal
 
- 	
+	document.getElementById("subTotal").value=oldTotal
+	document.getElementById("discountAmount").value=0
+	document.getElementById("finalTotal").value=oldTotal
+	document.getElementById('applyButton').style.display = 'block'
+	document.getElementById('removeButton').style.display = 'none'
 
-	}
-
-
-		
+}
 
 </script>

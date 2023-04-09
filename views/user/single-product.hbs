@@ -1,299 +1,409 @@
-
 <!--- Include the above in your HEAD tag -->
 
 
 <head>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 </head>
+
+
+<div class="container">
+  <div class="card">
+    <div class="container-fliud">
+      <div class="wrapper row">
+        <div class="preview col-md-6">
+
+          <div class="preview-pic  tab-content text-center" id="magnifying-area" style="text-center; ;">
+
+            <div class="tab-pane active" id="imageToZoom1"><img src="/productImages/{{product.image.[0]}}" /></div>
+            <div class="tab-pane" id="imageToZoom2"><img src="/productImages/{{product.image.[1]}}" /></div>
+            <div class="tab-pane" id="imageToZoom3"><img src="/productImages/{{product.image.[2]}}" /></div>
+            <div class="tab-pane" id="imageToZoom4"><img src="/productImages/{{product.image.[3]}}" /></div>
+          </div>
+          <div class="">
+            <ul class="preview-thumbnail nav nav-tabs  mx-auto" style="justify-content: center;">
+              <li class="active">
+                <a data-target="#imageToZoom1" data-toggle="tab" class="">
+                  <img src="/productImages/{{product.image.[0]}}" class="mx-auto" />
+                </a>
+              </li>
+              <li>
+                <a data-target="#imageToZoom2" data-toggle="tab">
+                  <img src="/productImages/{{product.image.[1]}}" class="mx-auto" />
+                </a>
+              </li>
+              <li>
+                <a data-target="#imageToZoom3" data-toggle="tab">
+                  <img src="/productImages/{{product.image.[2]}}" class="mx-auto" />
+                </a>
+              </li>
+              <li>
+                <a data-target="#imageToZoom4" data-toggle="tab">
+                  <img src="/productImages/{{product.image.[3]}}" class="mx-auto" />
+                </a>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="details col-md-6 mt-5 pt-5">
+          <h3 class="product-title">{{product.name}}</h3>
+          {{!-- <div class="rating">
+            <div class="stars">
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+            </div>
+            <span class="review-no">41 reviews</span>
+          </div> --}}
+          <p class="product-description">{{product.description}}</p>
+
+          <li class="mb-3">
+            Cash on Delivery Eligible.
+          </li>
+          <li class="mb-3">
+            Shipping Speed to Delivery.
+          </li>
+
+
+          <h4 class="price">current price: <span>₹ {{product.price}}</span></h4>
+
+
+          <br><br>
+          <div class="action">
+            <a href="/add-to-cart/{{product._id}}">
+              <button class="add-to-cart btn btn-default" type="button">Add to Cart</button>
+            </a>
+
+            {{!-- <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button> --}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <h3>User Reviews : </h3>
+
+  <div class="container">
+    {{#each reviewData}}
+    <h5><span><b>{{this.name}}</b></span>,({{this.email}})</h5> 
+    <p>{{this.review}}</p>
+    {{/each}}
+  </div>
+
+
   
-	
-	<div class="container">
-		<div class="card">
-			<div class="container-fliud">
-				<div class="wrapper row">
-					<div class="preview col-md-6">
-						
-						<div class="preview-pic  tab-content text-center"  style= "text-center;">
-						 
-              <div class="tab-pane active"  id="imageToZoom1"><img  src="/productImages/{{product.image.[0]}}" /></div>
-              <div class="tab-pane" id="imageToZoom2"><img src="/productImages/{{product.image.[1]}}"/></div>
-						  <div class="tab-pane" id="imageToZoom3"><img src="/productImages/{{product.image.[2]}}" /></div>
-              <div class="tab-pane" id="imageToZoom4"><img src="/productImages/{{product.image.[3]}}" /></div>
-						</div>
-                <div class="">
-                    <ul class="preview-thumbnail nav nav-tabs  mx-auto" style="justify-content: center;">
-                      <li class="active">
-                        <a data-target="#imageToZoom1" data-toggle="tab" class="">
-                        <img src="/productImages/{{product.image.[0]}}" class="mx-auto" />
-                        </a>
-                        </li>
-                        <li>
-                          <a data-target="#imageToZoom2" data-toggle="tab">
-                            <img src="/productImages/{{product.image.[1]}}" class="mx-auto" />
-                          </a>
-                        </li>
-                        <li>
-                          <a data-target="#imageToZoom3" data-toggle="tab">
-                          <img src="/productImages/{{product.image.[2]}}" class="mx-auto" />
-                          </a>
-                        </li>
-                        <li>
-                          <a data-target="#imageToZoom4" data-toggle="tab">
-                            <img src="/productImages/{{product.image.[3]}}" class="mx-auto" />
-                          </a>
-                        </li>
-                    </ul>
-                </div>
-						
-					</div>
-					<div class="details col-md-6 mt-5 pt-5" >
-						<h3 class="product-title">{{product.name}}</h3>
-						{{!-- <div class="rating">
-							<div class="stars">
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star checked"></span>
-								<span class="fa fa-star"></span>
-								<span class="fa fa-star"></span>
-							</div>
-							<span class="review-no">41 reviews</span>
-						</div> --}}
-						<p class="product-description">{{product.description}}</p>
-                            
-                                <li class="mb-3">
-								Cash on Delivery Eligible.
-							    </li>
-							    <li class="mb-3">
-								Shipping Speed to Delivery.
-							    </li>
-                            
-                            
-						<h4 class="price">current price: <span>₹ {{product.price}}</span></h4>
-						
-      
-						<br><br>
-						<div class="action">
-                            <a href="/add-to-cart/{{product._id}}">
-                                <button class="add-to-cart btn btn-default" type="button">Add to Cart</button>
-                            </a>
-							
-							{{!-- <button class="like btn btn-default" type="button"><span class="fa fa-heart"></span></button> --}}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
- 
+  <form action="/submit-review" method="post">
+    <div class="form-group">
+      <label for="review">Enter your review here</label>
+      <textarea class="form-control" id="review" name="review" rows="3"></textarea>
+      <input type="text" value="{{product._id}}" name="prodId" hidden>
+      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </div>
+  </form>
+
+  
+</div>
 
 
 
 
 <style>
-
-/*****************globals*************/
-body {
-  font-family: 'open sans';
-   }
-
-img {
-  max-width: 100%; 
-  
+  /*****************globals*************/
+  body {
+    font-family: 'open sans';
   }
 
-.preview {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column; }
+
+
+  #magnifying-area {
+    width: 500px;
+    height: 700px;
+    overflow: hidden;
+    border: 3px;
+    position: relative;
+    align-items: center;
+  }
+
+  #imageToZoom1,
+  #imageToZoom2,
+  #imageToZoom3,
+  #imageToZoom4 {
+    max-width: 100%;
+    min-width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .preview {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
   @media screen and (max-width: 996px) {
     .preview {
-      margin-bottom: 20px; } }
+      margin-bottom: 20px;
+    }
+  }
 
-.preview-pic {
-   ;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1; }
+  .preview-pic {
+    ;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
 
-.preview-thumbnail.nav-tabs {
-  border: none;
-  margin-top: 15px;
-  align-items: center;
-  
-   }
+  .preview-thumbnail.nav-tabs {
+    border: none;
+    margin-top: 15px;
+    align-items: center;
+
+  }
+
   .preview-thumbnail.nav-tabs li {
     width: 18%;
     height: 100%;
     margin-right: 2.5%;
-    margin-left: 2.5%; 
-    }
-    .preview-thumbnail.nav-tabs li img {
-      max-width: 50%;
-      display: block;
-       }
-    .preview-thumbnail.nav-tabs li a {
-      padding: 0;
-      margin: 0; 
-      }
-    .preview-thumbnail.nav-tabs li:last-of-type {
-      margin-right: 0; 
-      }
-
-.tab-content {
-  overflow: hidden; 
+    margin-left: 2.5%;
   }
+
+  .preview-thumbnail.nav-tabs li img {
+    max-width: 50%;
+    display: block;
+  }
+
+  .preview-thumbnail.nav-tabs li a {
+    padding: 0;
+    margin: 0;
+  }
+
+  .preview-thumbnail.nav-tabs li:last-of-type {
+    margin-right: 0;
+  }
+
+  .tab-content {
+    overflow: hidden;
+  }
+
   .tab-content img {
     width: 100%;
     -webkit-animation-name: opacity;
-            animation-name: opacity;
+    animation-name: opacity;
     -webkit-animation-duration: .3s;
-            animation-duration: .3s; 
-            }
-
-.card {
-  margin-top: 50px;
-  background: #eee;
-  padding: 3em;
-  line-height: 1.5em; 
+    animation-duration: .3s;
   }
 
-@media screen and (min-width: 997px) {
-  .wrapper {
+  .card {
+    margin-top: 50px;
+    background: #eee;
+    padding: 3em;
+    line-height: 1.5em;
+  }
+
+  @media screen and (min-width: 997px) {
+    .wrapper {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+  }
+
+  .details {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex; 
-    } }
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
 
-.details {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column; 
-          }
+  .colors {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }
 
-.colors {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1; 
-          }
+  .product-title,
+  .price,
+  .sizes,
+  .colors {
+    text-transform: UPPERCASE;
+    font-weight: bold;
+  }
 
-.product-title, .price, .sizes, .colors {
-  text-transform: UPPERCASE;
-  font-weight: bold; }
+  .checked,
+  .price span {
+    color: #ff9f1a;
+  }
 
-.checked, .price span {
-  color: #ff9f1a; }
+  .product-title,
+  .rating,
+  .product-description,
+  .price,
+  .vote,
+  .sizes {
+    margin-bottom: 15px;
+  }
 
-.product-title, .rating, .product-description, .price, .vote, .sizes {
-  margin-bottom: 15px; }
+  .product-title {
+    margin-top: 0;
+  }
 
-.product-title {
-  margin-top: 0; }
+  .size {
+    margin-right: 10px;
+  }
 
-.size {
-  margin-right: 10px; }
   .size:first-of-type {
-    margin-left: 40px; }
+    margin-left: 40px;
+  }
 
-.color {
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 10px;
-  height: 2em;
-  width: 2em;
-  border-radius: 2px; }
+  .color {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    height: 2em;
+    width: 2em;
+    border-radius: 2px;
+  }
+
   .color:first-of-type {
-    margin-left: 20px; }
+    margin-left: 20px;
+  }
 
-.add-to-cart, .like {
-  background: #ff9f1a;
-  padding: 1.2em 1.5em;
-  border: none;
-  text-transform: UPPERCASE;
-  font-weight: bold;
-  color: #fff;
-  -webkit-transition: background .3s ease;
-          transition: background .3s ease; }
-  .add-to-cart:hover, .like:hover {
+  .add-to-cart,
+  .like {
+    background: #ff9f1a;
+    padding: 1.2em 1.5em;
+    border: none;
+    text-transform: UPPERCASE;
+    font-weight: bold;
+    color: #fff;
+    -webkit-transition: background .3s ease;
+    transition: background .3s ease;
+  }
+
+  .add-to-cart:hover,
+  .like:hover {
     background: #b36800;
-    color: #fff; }
+    color: #fff;
+  }
 
-.not-available {
-  text-align: center;
-  line-height: 2em; }
+  .not-available {
+    text-align: center;
+    line-height: 2em;
+  }
+
   .not-available:before {
     font-family: fontawesome;
     content: "\f00d";
-    color: #fff; }
+    color: #fff;
+  }
 
-.orange {
-  background: #ff9f1a; }
+  .orange {
+    background: #ff9f1a;
+  }
 
-.green {
-  background: #85ad00; }
+  .green {
+    background: #85ad00;
+  }
 
-.blue {
-  background: #0076ad; }
+  .blue {
+    background: #0076ad;
+  }
 
-.tooltip-inner {
-  padding: 1.3em; }
+  .tooltip-inner {
+    padding: 1.3em;
+  }
 
-@-webkit-keyframes opacity {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(3);
-            transform: scale(3); }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
+  @-webkit-keyframes opacity {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(3);
+      transform: scale(3);
+    }
 
-@keyframes opacity {
-  0% {
-    opacity: 0;
-    -webkit-transform: scale(3);
-            transform: scale(3); }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1); } }
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
 
-/*# sourceMappingURL=style.css.map */
+  @keyframes opacity {
+    0% {
+      opacity: 0;
+      -webkit-transform: scale(3);
+      transform: scale(3);
+    }
+
+    100% {
+      opacity: 1;
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+
+  /*# sourceMappingURL=style.css.map */
 </style>
 
 
 
 <script>
-var options = {
-    width: 500,
-    height:500,
-    zoomWidth: 450,
-    scale:1,
-    offset:{
-      vertical:0,
-      horizontal:-500
-    },
-};
-        new ImageZoom(document.getElementById("imageToZoom1"), options)
-        new ImageZoom(document.getElementById("imageToZoom2"), options)
-        new ImageZoom(document.getElementById("imageToZoom3"), options)
-        new ImageZoom(document.getElementById("imageToZoom4"), options)
+
+  let magnifyingArea = document.getElementById("magnifying-area")
+  let magnifyingImg1 = document.getElementById("imageToZoom1")
+  let magnifyingImg2 = document.getElementById("imageToZoom2")
+  let magnifyingImg3 = document.getElementById("imageToZoom3")
+  let magnifyingImg4 = document.getElementById("imageToZoom4")
+
+  magnifyingArea.addEventListener("mousemove", (event) => {
+    clientX = event.clientX - magnifyingArea.offsetLeft
+    clientY = event.clientY - magnifyingArea.offsetTop
+
+    mWidth = magnifyingArea.offsetWidth
+    mHeight = magnifyingArea.offsetHeight
+
+    clientX = clientX / mWidth * 100
+    clientY = clientY / mHeight * 100
+
+    magnifyingImg1.style.transform = 'translate(-' + clientX + '%,-' + clientY + '%) scale(2)'
+    magnifyingImg2.style.transform = 'translate(-' + clientX + '%,-' + clientY + '%) scale(2)'
+    magnifyingImg3.style.transform = 'translate(-' + clientX + '%,-' + clientY + '%) scale(2)'
+    magnifyingImg4.style.transform = 'translate(-' + clientX + '%,-' + clientY + '%) scale(2)'
+  })
+
+  magnifyingArea.addEventListener("mouseleave", () => {
+    magnifyingImg1.style.transform = 'translate(-50%,-50%) scale(1)'
+    magnifyingImg2.style.transform = 'translate(-50%,-50%) scale(1)'
+    magnifyingImg3.style.transform = 'translate(-50%,-50%) scale(1)'
+    magnifyingImg4.style.transform = 'translate(-50%,-50%) scale(1)'
+  })
+
+
+
+
 </script>

@@ -1,7 +1,7 @@
 const { Router } = require('express');
 var express = require('express');
 const { addListener } = require('nodemon');
-const { adminDash, viewProducts, addProduct, postAddProduct, editProduct, deleteProduct, postEditProduct, adminLogin, postAdminLogin, viewUsers, adminBlockUser, adminUnblockUser, viewCategories, addCategory, postAddcategory, deleteCategory, editCategory, postAddCategory, postEditCategory, adminViewProducts, adminAddProduct, adminDeleteProduct, viewInventory, addStock, postAddStock, adminViewOrders, adminLogout, postOrderStatus, postUpdateStatus, viewAdminProductCards, updateStatus, addCoupon, postAddCoupon, viewCoupon, editCoupon, postEditCoupon, deleteCoupon } = require('../controllers/admin-controller');
+const { adminDash, viewProducts, addProduct, postAddProduct, editProduct, deleteProduct, postEditProduct, adminLogin, postAdminLogin, viewUsers, adminBlockUser, adminUnblockUser, viewCategories, addCategory, postAddcategory, deleteCategory, editCategory, postAddCategory, postEditCategory, adminViewProducts, adminAddProduct, adminDeleteProduct, viewInventory, addStock, postAddStock, adminViewOrders, adminLogout, postOrderStatus, postUpdateStatus, viewAdminProductCards, updateStatus, addCoupon, postAddCoupon, viewCoupon, editCoupon, postEditCoupon, deleteCoupon, sendRefundProcess, addBanner, postAddBanner, viewBanner, editBanner, postEditBanner, deleteBanner, salesReport } = require('../controllers/admin-controller');
 var router = express.Router();
 const adminController=require('../controllers/admin-controller')
 var productHelper=require('../helpers/product-helpers')
@@ -22,7 +22,24 @@ const multerStorageProduct=multer.diskStorage({
         cb(null,Date.now() + '-' + file.originalname)
     }
 })
+
+// MULTER ---------->Banner
+
+const multerStorageBanner=multer.diskStorage({
+    destination:(req,file,cb)=>{
+        cb(null,"./public/bannerImages");
+    },
+    filename:(req,file,cb)=>{
+        cb(null,Date.now() + '-' + file.originalname)
+    }
+})
+
 const uploadMultiple=multer({storage:multerStorageProduct})
+
+//banner uploads
+const uploadBanner=multer({storage:multerStorageBanner})
+const multipleBanner=uploadBanner.fields([{name:'bannerImage1',maxCount:1},{name:'bannerImage2',maxCount:1},{name:'bannerImage3',maxCount:1},{name:'bannerImage4',maxCount:1}])
+
 
 
 //admin-login
@@ -102,6 +119,9 @@ router.get('/view-admin-order-cards',verifyAdminLogin,viewAdminProductCards)
 //change order status
 router.post('/product-status',verifyAdminLogin,updateStatus)
 
+//send refund
+router.post('/admin/send-refund',verifyAdminLogin,sendRefundProcess)
+
 // **************************************   COUPON MANAGEMENT ************************
 
 //coupon-management
@@ -114,6 +134,30 @@ router.get('/edit-coupon',verifyAdminLogin,editCoupon)
 router.post('/edit-coupon',verifyAdminLogin,postEditCoupon)
 
 router.get('/delete-coupon',verifyAdminLogin,deleteCoupon)
+
+
+// **************************************   BANNER MANAGEMENT ************************
+
+//view banner
+router.get('/banner-management',verifyAdminLogin,viewBanner)
+
+//add banner
+router.get('/add-banner',verifyAdminLogin,addBanner)
+router.post('/add-banner',verifyAdminLogin,multipleBanner,postAddBanner)
+
+//edit banner
+router.get('/edit-banner/',verifyAdminLogin,editBanner)
+router.post('/edit-banner/',verifyAdminLogin,multipleBanner,postEditBanner)
+
+//delete banner
+router.get('/delete-banner/:id',verifyAdminLogin,deleteBanner)
+
+
+// **************************************   SALES REPORT ************************
+
+router.get('/sales-report',verifyAdminLogin,salesReport)
+
+router.post('/sales-date-apply',verifyAdminLogin,adminController.sortSales)
 
 
 

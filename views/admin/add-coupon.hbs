@@ -1,5 +1,5 @@
 <div class="container mt-5">
-    <form action="/admin/add-coupon" method="post">
+    <form action="/admin/add-coupon" method="post" onsubmit="return validateForm()">
         <div class="form-group my-2">
             <label for="couponName">Coupon Name</label>
             <input type="text" name="couponName" class="form-control" id="couponName"
@@ -11,26 +11,19 @@
                 placeholder="Enter Coupon Description">
         </div>
         <div class="form-group my-2">
-            <label for="couponType">Select Coupon Type</label>
-            <select class="form-control" name="couponType" id="couponType" >
-                <option>Percentage Discount</option>
-                <option>Amount Discount</option>
-            </select>
+            <label for="discountPercent">Discount Percentage</label>
+            <input type="number" name="discountPercent" class="form-control" id="discountPercent"
+                placeholder="Enter discount percentage">
         </div>
         <div class="form-group my-2">
-            <label for="couponValue">Coupon Value</label>
-            <input type="number" name="couponvalue" class="form-control" id="couponvalue"
-                placeholder="Enter Coupon Value">
+            <label for="validFrom">Start Date</label>
+            <input type="date" name="validFrom" class="form-control" id="validFrom"
+                placeholder="Enter Start Date"> <span class="formError" style="color: red;"></span>
         </div>
         <div class="form-group my-2">
-            <label for="couponStartDate">Start Date</label>
-            <input type="date" name="couponStartDate" class="form-control" id="couponStartDate"
-                placeholder="Enter Start Date">
-        </div>
-        <div class="form-group my-2">
-            <label for="couponEndDate">End Date</label>
-            <input type="date" name="couponEndDate" class="form-control" id="couponEndDate"
-                placeholder="Enter End Date">
+            <label for="validTill">End Date</label>
+            <input type="date" name="validTill" class="form-control" id="validTill"
+                placeholder="Enter End Date"> <span id="dateError" class="formError" style="color: red;"></span>
         </div>
         <div class="form-group my-2">
             <label for="minAmount">Minimum Purchase Amount</label>
@@ -43,14 +36,9 @@
                 placeholder="Enter Maximum Purchase Amount">
         </div>
         <div class="form-group my-2">
-            <label for="usageLimit">Usage Limit</label>
-            <input type="number" name="usageLimit" class="form-control" id="usageLimit"
+            <label for="maxUses">Usage Limit</label>
+            <input type="number" name="maxUses" class="form-control" id="maxUses"
                 placeholder="Enter Usage Limit for Coupon">
-        </div>
-        <div class="form-group my-2">
-            <label for="usageLimitUser">Usage Limit per customer</label>
-            <input type="number" name="usageLimitUser" class="form-control" id="usageLimitUser"
-                placeholder="Enter Usage Limit for Coupon per customer">
         </div>
         <div class="form-group my-2">
             <label for="couponType">Status</label>
@@ -59,11 +47,6 @@
                 <option>Disable</option>
             </select>
         </div>
-        <div class="form-group my-2">
-            <label for="noOfItems">Number of Items coupon can be applied on</label>
-            <input type="number" name="noOfItems" class="form-control" id="noOfItems"
-                placeholder="Enter number of items coupon can be applied on">
-        </div>
         <div>
             <button type="submit" class="btn btn-primary mb-2 mt-4">Save Coupon</button>
             <button type="reset" class="btn btn-secondary mb-2 mt-4">Cancel</button>
@@ -71,3 +54,26 @@
         
     </form>
 </div>
+
+<script>
+    function setError(id,error){
+        element=document.getElementById(id);
+        element.getElementById('dateError').innerHTML=error;
+    }
+    function validateForm(){
+
+        let returnval=true;
+        let field1 = document.querySelector('#validFrom');
+        let field2 = document.querySelector('#validTill');
+
+        let fromDate=new Date(field1.value)
+        let tillDate=new Date(field2.value)
+        
+        if (fromDate > tillDate){
+            setError("dateError","It is not possible to use dates in this way")
+            returnval=false
+        }
+        return returnval
+    }
+
+</script>

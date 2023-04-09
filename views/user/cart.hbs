@@ -76,3 +76,79 @@
 			</div>
 		</div>
 	</div>
+
+
+	<script>
+		
+		//change quantity function
+
+	function changeQuantity(cartId,prodId,userId,count){
+		let quantity=parseInt(document.getElementById(prodId).innerHTML)
+		count=parseInt(count)
+		console.log(userId);
+
+		$.ajax({
+			url:'/change-product-quantity',
+			data:{
+				user:userId,
+				cart:cartId,
+				product:prodId, 
+				count:count,
+				quantity:quantity
+			},
+			method:'post',
+			success:(response)=>{
+				if(response.removeProduct){
+					swal({
+						title: "Product Removed!",
+						text: "Product removed from cart!",
+						icon: "success",
+						button: "Ok!",
+					}).then(()=>{
+						location.reload();
+					});  
+					
+				}
+				else{
+					console.log(response,"response in ajax ");
+					document.getElementById(prodId).innerHTML=quantity+count
+					document.getElementById("totalAmount").innerHTML=response.total
+				}
+			}
+		})
+	}
+
+
+
+	//remove cart item
+
+	function removeCartItem(cartId,prodId){
+    // console.log(cartId,"cartid in ajax",prodId,"prodid in ajax");
+    $.ajax({
+        url:'/remove-cart-item',
+        data:{
+            cart:cartId,
+            product:prodId,   
+        },
+        method:'post',
+        success:(response)=>{
+            // console.log(response,"what comes at the end");
+            if(response.removeProduct){
+                swal({
+                    title: "Product Removed!",
+                    text: "Product removed from cart!",
+                    icon: "success",
+                    button: "Ok!",
+                  }).then(()=>{
+                    location.reload();
+                  });  
+                
+                
+            }
+            
+        }
+}
+    )}
+
+	
+	</script>

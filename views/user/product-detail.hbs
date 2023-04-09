@@ -16,10 +16,9 @@
 						<div class="flexslider">
 							
 							<div class="clearfix"></div>
-						<div class="flex-viewport" style="overflow: hidden; position: relative;">
-							<ul class="slides" style="width: 1000%; transition-duration: 0s; transform: translate3d(-1004px, 0px, 0px);">
+						
 								<div>
-									<img src="/product-images/{{this._id}}.jpg"  data-imagezoom="true" class="img-fluid" alt="" draggable="false">
+									<img src="/product-images/{{this._id}}.jpg"   class="img-fluid" alt="" draggable="false">
 
 								</div>
 								{{!-- <li data-thumb="images/si3.png" class="clone" aria-hidden="true"
@@ -63,11 +62,11 @@
 							
 								<div class="row">
 									<div class="image-container col-md-12" id="image-container">
-										<img src="/product-images/{{product._id}}.jpg" class="pb-5" draggable="false" data-imagezoom="true">
+										<img src="/product-images/{{product._id}}.jpg" class="pb-5" draggable="false" >
 									</div>
 									
 									<div class="col-md-3 border border-1 mx-1 " >
-										<img src="/product-images2/{{product._id}}.jpg" class="px-3" draggable="false" style="width:100px;height:100px">
+										<img src="/product-images2/{{product._id}}.jpg" class="px-3" draggable="false" style="width:75px;height:100px">
 									</div>
 									<div class="col-md-3 border border-1 mx-1" >
 										<img src="/product-images3/{{product._id}}.jpg" draggable="false" style="width:100px;height:100px">
@@ -180,7 +179,14 @@
 		</div>
 	</div>
 <script>
-    console.log("image zoom")
+    
+</script>
+
+
+
+
+
+	{{!-- console.log("image zoom")
     var options = {
     width: 350, // required
     zoomWidth: -1000,
@@ -190,13 +196,6 @@
       horizontal:-400
     }
 };
-new ImageZoom(document.getElementById("image-container"), options);
-</script>
-
-
-
-
-
-	
+new ImageZoom(document.getElementById("image-container"), options); --}}
 
 {{!-- image zoom script --}}

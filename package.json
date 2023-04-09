@@ -24,8 +24,10 @@
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^2.0.20",
+    "paypal-rest-sdk": "^1.8.1",
     "razorpay": "^2.8.4",
-    "twilio": "^2.5.2",
+    "stripe": "^11.14.0",
+    "twilio": "^4.7.2",
     "uid": "^2.0.1"
   }
 }

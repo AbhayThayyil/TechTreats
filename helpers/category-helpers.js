@@ -39,14 +39,30 @@ module.exports={
     //add to set test
 
     
-
-    getAllCategories:()=>{
+    getAllCategoriesOnly:()=>{
+        return new Promise(async(resolve,reject)=>{
+            let categories=await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
+            resolve(categories)
+        })
+    },
+    getAllCategories:(pageNumber)=>{
         return new Promise((async(resolve,reject)=>{
             try {
-                let categories=await db.get().collection(collection.CATEGORY_COLLECTION).find().toArray()
+                const prodLimit=5;
+                let categories=await db.get().collection(collection.CATEGORY_COLLECTION).find().sort({_id:-1})
+                .skip((pageNumber-1)*prodLimit).limit(prodLimit).toArray()
             // console.log(categories,"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            resolve(categories)
+            const totalCategories=await db.get().collection(collection.CATEGORY_COLLECTION).countDocuments();
+            const totalPages=Math.ceil(totalCategories/prodLimit)
+
+            let categoryObj={
+                categories:categories,
+                totalCategories:totalCategories,
+                totalPages:totalPages
+            }
+            resolve(categoryObj)
             } catch (error) {
+                console.log(error);
                 let err={}
                 err.message="Cannot get all category data"
                 reject(err)

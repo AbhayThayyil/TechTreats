@@ -1,0 +1,64 @@
+<section>
+    <div class="container">
+        <div class="row">
+            <a href="/admin/add-banner" class="btn btn-success my-3">Add Banner</a>
+        </div>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Banner Title</th>
+                    <th scope="col">Description1</th>
+                    <th scope="col">Image1</th>
+                    <th scope="col">Banner Category1</th>
+                    <th scope="col">Description2</th>
+                    <th scope="col">Image2</th>
+                    <th scope="col">Banner Category2</th>
+                    <th scope="col">Description3</th>
+                    <th scope="col">Image3</th>
+                    <th scope="col">Banner Category3</th>
+                    <th scope="col">Description4</th>
+                    <th scope="col">Image4</th>
+                    
+                    
+                    <th scope="col">Operations</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each bannerData}}
+                <tr>
+                    <th scope="row">{{@index}}</th>
+                    <td>{{this.bannerName}}</td>
+                    <td>{{this.bannerDescription1}}</td>
+                    <td><img style="width:75px;height:75px;object-fit:contain" src="../bannerImages/{{this.image1}} " alt=""></td>
+                    <td>{{this.category1}}</td>
+
+                    <td>{{this.bannerDescription2}}</td>
+                    <td><img style="width:75px;height:75px;object-fit:contain" src="../bannerImages/{{this.image2}} " alt=""></td>
+                    <td>{{this.category2}}</td>
+
+                    <td>{{this.bannerDescription3}}</td>
+                    <td><img style="width:75px;height:75px;object-fit:contain" src="../bannerImages/{{this.image3}} " alt=""></td>
+                    <td>{{this.category3}}</td>
+
+                    <td>{{this.bannerDescription4}}</td>
+                    <td><img style="width:75px;height:75px;object-fit:contain" src="../bannerImages/{{this.image4}} " alt=""></td>
+                    
+
+                    <td><a href="/admin/edit-banner?id={{this._id}}"><i class="btn btn-primary bi bi-pencil-square my-2"></i></a>
+                    <a href="/admin/delete-banner/{{this._id}}"><i class="btn btn-danger bi bi-trash my-2" onclick="return confirm('Are you sure you want to delete {{this.bannerName}}?')"></i></a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div class="text-center my-3">
+            <a href="?page={{previous}}">Previous</a>
+            {{#iterateTimes totalPages}}
+        <a href="?page={{this}}">{{this}}</a>
+            {{/iterateTimes}}
+            <a href="?page={{next}}">Next</a>
+        </div>
+    </div>
+</section>

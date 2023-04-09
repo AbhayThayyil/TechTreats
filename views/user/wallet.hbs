@@ -1,0 +1,79 @@
+
+
+
+<div class="wrapper rounded mx-5">
+    <nav class="navbar navbar-expand-lg navbar-dark dark d-lg-flex align-items-lg-start"> 
+        <h3 class="text-dark pl-1">Your wallet balance is : <b style="color: #292560;">  &#8377; {{walletData.balance}}</b> </h3>  
+    
+    </nav>
+     
+
+    <div class="d-flex justify-content-between align-items-center mt-3">
+        <ul class="nav nav-tabs w-75" >
+            <li class="nav-item"><button style="background-color:#292560; color:white;" id="hist" class="btn  mr-1" onclick="showHistory()">History</button> </li>
+        </ul> 
+        
+    </div>
+    
+    <div style="display: block;" class="table-responsive mt-3" id="history">
+        
+        <table class="table table-light table-borderless">
+            <thead>
+                
+                <tr>
+                    <th scope="col">Activity</th>
+                    <th scope="col">Mode</th>
+                    <th scope="col">Date</th>
+                    <th scope="col" class="text-right">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each walletData}}
+                <tr>
+                    <td scope="row"> <span class="fa fa-exchange mr-1">₹ {{this.totalPrice}} credited for return on order cancellation of {{this.productDetails.name}} with order number {{this.orderId}}</span>  </td>
+                    <td><span >{{this.paymentMethod}}</span></td>
+                    <td class="text-muted">{{this.date}}</td>
+                    <td class="d-flex justify-content-end align-items-center"> <span
+                            class=" mr-1"></span>₹: {{this.totalPrice}} </td>
+                </tr>
+                {{/each}}
+               
+                {{!-- <tr>
+                    <td scope="row"> <span class="fa fa-exchange mr-1"></span> Monthly Salary </td>
+                    <td><span class="fa fa-cc-visa"></span></td>
+                    <td class="text-muted">10 Jul 2020, 8:30 PM</td>
+                    <td class="d-flex justify-content-end align-items-center"> <span
+                            class=" mr-1"></span> $9,765.00 </td>
+                </tr> --}}
+             
+               
+            
+            </tbody>
+        </table>
+        
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center results"> <span id="pagination" style="display: block;"
+            class="pl-md-3">Showing<b class="text"> 1-7 0f 200 </b> trasactions</span>
+        <div class="pt-3" id="next" style="display: block;">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    
+    
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    
+</div>
+
+
+
+

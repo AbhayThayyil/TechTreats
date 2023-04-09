@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col">
         <nav aria-label="breadcrumb" class="bg-light rounded-3 p-3 mb-4">
-         
+
         </nav>
       </div>
     </div>
-{{#if userInSession}}
+    {{#if userInSession}}
     <div class="row">
       <div class="col-lg-4">
         <div class="card mb-4">
@@ -15,11 +15,11 @@
             <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
             <h5 class="my-3">{{userInSession.name}}</h5>
-            
-            
+
+
           </div>
         </div>
-        
+
       </div>
       <div class="col-lg-8">
         <div class="card mb-4">
@@ -57,44 +57,55 @@
     </div>
     {{/if}}
 
-  
+    <div class="col-lg-3 me-auto">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="row">
+            <a href="/edit-credentials">Edit your Credentials</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
     <div class="container ">
       <div class="row">
 
-        
+
         <div class="col-md-6 ">
           <div class="mt-5 mb-5 ">
             {{#each address }}
             <div class="card mt-5 mb-2" style="width: 18rem;">
-            <div class="card-header text-center">
-              Saved Address
+              <div class="card-header text-center">
+                Saved Address
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">Address: {{this.address}} </li>
+                <li class="list-group-item">City: {{this.city}}</li>
+                <li class="list-group-item">Pin Code: {{this.pincode}}</li>
+                <li class="list-group-item">Mobile: {{this.mobile}}</li>
+
+              </ul>
             </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">Address: {{this.address}} </li>
-              <li class="list-group-item">City: {{this.city}}</li>
-              <li class="list-group-item">Pin Code: {{this.pincode}}</li>
-              <li class="list-group-item">Mobile: {{this.mobile}}</li>
-               
-            </ul>
+            <div>
+              <button class="btn btn-danger"
+                onclick="deleteAddress('{{this.userId}}','{{this.addressid}}')">Delete</button>
+            </div>
+            {{/each}}
           </div>
-          <div>
-            <button class="btn btn-danger" onclick="deleteAddress('{{this.userId}}','{{this.addressid}}')">Delete</button>
-          </div>
-          {{/each}}
-          </div>
-          
+
         </div>
 
 
-      <div class="col-md-6 mt-1">
-        <form action="/submit-address" method="post">
-    
+        <div class="col-md-6 mt-1">
+          <form action="/submit-address" method="post">
+
             <h4 class="mb-3 text-center font-weight-bold">Enter Delivery Details</h4>
-    
+
             <div class="controls form-group">
-              <input class="billing-address-name form-control" id="address" type="text" name="address" placeholder="Address"
-                required="">
+              <input class="billing-address-name form-control" id="address" type="text" name="address"
+                placeholder="Address" required="">
             </div>
             <div class="controls form-group">
               <input type="text" class="form-control" id="city" placeholder="Town/City" name="city" required="">
@@ -102,7 +113,8 @@
             <div class="w3_agileits_card_number_grids">
               <div class="w3_agileits_card_number_grid_left form-group">
                 <div class="controls">
-                  <input type="number" class="form-control" id="pincode" placeholder="Pin Code" name="pincode" required="">
+                  <input type="number" class="form-control" id="pincode" placeholder="Pin Code" name="pincode"
+                    required="">
                 </div>
               </div>
               <div class="w3_agileits_card_number_grid_left form-group">
@@ -117,9 +129,118 @@
                 <button class="btn btn-primary" type="submit">Add Address</button>
               </div>
             </div>
-            </form>
-      </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<section>
+  <div class="container">
+    <h3 class="text-center mt-2">Recent Orders</h3>
+    <div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Original Price</th>
+            <th scope="col">Date</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each orders}}
+          <tr>
+            <th scope="row">{{this.productData.name}}</th>
+            <td>{{this.productData.price}}</td>
+            <td>{{this.date}}</td>
+            <td>{{this.products.status}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<script>
+
+  //delete address
+
+  function deleteAddress(userId, addressid) {
+    console.log("ID checks", userId, addressid);
+
+    swal({
+      title: "Are you sure?",
+      text: "Are you sure you want to delete this address ?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: '/delete-address',
+            data: {
+              user: userId,
+              address: addressid
+            },
+            method: 'post',
+            success: (response)=>{
+              if (response.deleteAddress){
+                swal("The address has been deleted!", {
+              icon: "success",
+            });
+              }
+              else{
+                swal("The address is not deleted");
+              }
+            }
+          })
+        }
+      }).then(() => {
+          location.reload();
+        })
+  }
+</script>
+
+
+{{!-- function deleteAddress(userId, addressid) {
+console.log("ID checks", userId, addressid);
+$.ajax({
+url: '/delete-address',
+data: {
+user: userId,
+address: addressid
+},
+method: 'post',
+success: (response) => {
+console.log(response);
+if (response.deleteAddress) {
+swal({
+title: "Are you sure?",
+text: "Are you sure you want to delete this address ?",
+icon: "warning",
+buttons: true,
+dangerMode: true,
+})
+.then((willDelete) => {
+if (willDelete) {
+swal("The address has been deleted!", {
+icon: "success",
+});
+} else {
+swal("The address is not deleted");
+}
+}).then(() => {
+location.reload();
+})
+}
+else {
+
+}
+
+}
+})
+} --}}

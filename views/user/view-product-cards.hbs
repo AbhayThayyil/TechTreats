@@ -2,7 +2,8 @@
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-lg-10 col-xl-8">
-        <div class="card" style="border-radius: 10px;">
+        <button class="btn btn-success text-white my-3" onclick="generatePDF()">Download Invoice</button>
+        <div class="card" style="border-radius: 10px;" id="invoice">
           <div class="card-header px-4 py-5">
             <h5 class="text-muted mb-0">Thanks for your Order , {{userName}}!</h5>
           </div>
@@ -18,8 +19,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-2">
-                    <img src="/productImages/{{this.productDetail.image.[0]}} " 
-                      class="img-fluid" alt="Phone">
+                    <img src="/productImages/{{this.productDetail.image.[0]}} " class="img-fluid" alt="Phone">
                   </div>
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                     <p class="text-muted mb-0">{{this.productDetail.name}}</p>
@@ -34,14 +34,14 @@
                     <p class="text-muted mb-0 small">Qty: {{this.quantity}} </p>
                   </div>
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p class="text-muted mb-0 small">₹ {{this.productDetail.price}}</p>
+                    <p class="text-muted mb-0 small">₹ {{this.finalAmount}}</p>
                   </div>
                 </div>
-                   
-                  
-                   
 
-                
+
+
+
+
 
 
                 <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -78,36 +78,48 @@
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">{{this.status}}</p>
                     </div>
 
-                    
+
 
                   </div>
                   {{#isEqual this.status 'placed'}}
                   <div class="col-md-6" data-html2canvas-ignore="true">
-                    <button  class="btn btn-danger" style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;" onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel Order</button>
+                    <button class="btn btn-danger"
+                      style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;"
+                      onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel
+                      Order</button>
+
                   </div>
                   {{/isEqual}}
                   {{#isEqual this.status 'Shipped'}}
                   <div class="col-md-6" data-html2canvas-ignore="true">
-                    <button  class="btn btn-danger" style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;" onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel Order</button>
+                    <button class="btn btn-danger"
+                      style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;"
+                      onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel
+                      Order</button>
                   </div>
                   {{/isEqual}}
                   {{#isEqual this.status 'Out for Delivery'}}
                   <div class="col-md-6" data-html2canvas-ignore="true">
-                    <button  class="btn btn-danger" style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;" onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel Order</button>
+                    <button class="btn btn-danger"
+                      style="border-radius: 6px; background-color: rgb(245, 21, 21); color: white;"
+                      onclick="cancelOrder('{{../this._id}}','{{../this.productDetail._id}}','{{../this.paymentMethod}}','{{../this.quantity}}')">Cancel
+                      Order</button>
                   </div>
                   {{/isEqual}}
                   {{#isEqual this.status 'Delivered'}}
                   <div class="col-md-6" data-html2canvas-ignore="true">
-                    <button  class="btn btn-danger" style="border-radius: 6px; background-color: rgb(212, 139, 55); color: white;" onclick="returnOrder('{{../this._id}}','{{../this.productDetail._id}}')">Return Order</button>
+                    <button class="btn btn-danger"
+                      style="border-radius: 6px; background-color: rgb(212, 139, 55); color: white;"
+                      onclick="returnOrder('{{../this._id}}','{{../this.productDetail._id}}')">Return Order</button>
                   </div>
                   {{/isEqual}}
-                  
+
 
                 </div>
               </div>
             </div>
             {{/each}}
-          
+
 
             {{!-- <div class="d-flex justify-content-between pt-2">
               <p class="fw-bold mb-0">Order Details</p>
@@ -130,136 +142,261 @@
               <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
             </div> --}}
           </div>
-          
+
+          <div class="mt-2 ms-5">
+            <h4>Order Details</h4>
+            <p>Invoice Number : 12345</p>
+            <p>Invoice Date : {{date}}</p>
+            <p>Sub Total : {{totalPaid}}</p>
+            <p>Discount applied :{{discountAmount}}</p>
+          </div>
+
           <div class="card-footer border-0 px-4 py-5"
             style="background-color: #292560; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
             <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-              paid: <span class="h2 mb-0 ms-2"> ₹ {{totalPaid}}</span></h5>
+              paid: <span class="h2 mb-0 ms-2"> ₹ {{finalAmount}}</span></h5>
           </div>
-          
+
         </div>
+
       </div>
     </div>
   </div>
 </section>
 
+{{!-- cdn for html2pdf --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.1/html2pdf.bundle.min.js"></script>
+
+
+<script>
+  function generatePDF() {
+    const invoicePDF = document.getElementById('invoice')
+    html2pdf(invoicePDF, {
+      margin: 15,
+      filename: 'techtreatsinvoice.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, logging: true, dpi: 192, letterRendering: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+  }
+
+
+</script>
 
 <script>
 
+
+  // Reason submit test
+
+
+
+
   //cancel order
-  function cancelOrder(orderId,prodId,paymentMethod,quantity){
-    console.log(orderId,prodId,paymentMethod,quantity,"this is the order id  and prod id ,payment,quantity passed to the fucntion")
-    
-    if(paymentMethod=='COD'){
+  function cancelOrder(orderId, prodId, paymentMethod, quantity) {
+    console.log(orderId, prodId, paymentMethod, quantity, "this is the order id  and prod id ,payment,quantity passed to the fucntion")
+
+    if (paymentMethod === 'COD') {
       console.log("Payment method is COD")
-      
-      $.ajax({
-      url:'/cancel-product',
-      data:{
-        orderId:orderId,
-        productId:prodId,
-        quantity:quantity,
-        cancelStatus:'Cancelled'
-      },
-      method:'post',
-      success:(response)=>{
-        console.log(response.status)
-        if(response.status){
-          swal({
-            title: "Are you sure?",
-            text: "Are you sure you want to cancel the order?",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-          })
-          .then((willDelete)=>{
-            if(willDelete){
-              swal("Poof! Your order has been cancelled!", {
-              icon: "success",
-          }).then(()=>{
-            location.reload()
-          });
-            }
-          })
-        }
-      }
-    })
-    }
-    else{
-      console.log("Other payment methods")
+
       swal({
         title: "Are you sure?",
+        text: "Are you sure you want to cancel the order?",
         icon: "warning",
         buttons: true,
         dangerMode: true,
       })
-      .then((willDelete)=>{
-        if(willDelete){
-          swal({
-            text:"Cancel Request initiated",
-            icon:"success"
-          }).then(()=>{
-            location.reload()
-          })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal({
+              title: 'Enter Reason',
+              text: '*Please enter reason for cancellation !',
+              content: {
+                element: 'input',
+                attributes: {
+                  placeholder: "Reason",
+                  type: 'text',
+                  required: 'true'
+                },
+              },
+              buttons: {
+                cancel: true,
+                confirm: {
+                  text: "Submit",
+                  value: true,
+                  visible: true,
+                  className: "btn-danger",
+                  closeModal: true
+                }
+              }
+            }).then((reason) => {
+              if (reason) {
 
+                $.ajax({
+                  url: '/cancel-product',
+                  data: {
+                    reason: reason,
+                    orderId: orderId,
+                    productId: prodId,
+                    quantity: quantity,
+                    cancelStatus: 'Cancelled'
+                  },
+                  method: 'post',
+                  success: (response) => {
+                    console.log(response)
+                    if (response.status) {
+                      swal("Poof! Your order has been cancelled!", {
+                        icon: "success",
+                      }).then(() => {
+                        location.reload()
+                      })
+                    }
+                    else {
+                      swal("Order remains")
+                    }
+                  }
+                })
 
-          $.ajax({
-        url:'/cancel-product',
-        data:{
-          orderId:orderId,
-        productId:prodId,
-        quantity:quantity,
-        cancelStatus:'Cancel Requested'
-        },
-        method: 'post',
-        success:(response)=>{
-          console.log(response.status)
-          if(response.status){
-            setTimeout(()=>{
-              location.reload()
-            },1000)
+              }
+              else {
+                swal("Please enter a reason and retry")
+              }
+            })
           }
-        }
+        })
+    }
 
+    else {
+      console.log("Other payment methods")
+
+      swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to cancel the order?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
       })
-    }
-    else{
-      console.log("No action taken")
-    }
-        
-      })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal({
+              title: 'Enter Reason',
+              text: 'Please enter reason for cancellation !',
+              content: {
+                element: 'input',
+                attributes: {
+                  placeholder: "Reason",
+                  type: 'text'
+                },
+              },
+              buttons: {
+                cancel: true,
+                confirm: {
+                  text: "Submit",
+                  value: true,
+                  visible: true,
+                  className: "btn-danger",
+                  closeModal: true
+                }
+              }
+            })
+              .then((reason) => {
+                if (reason) {
+
+                  $.ajax({
+                    url: '/cancel-product',
+                    data: {
+                      reason: reason,
+                      orderId: orderId,
+                      productId: prodId,
+                      quantity: quantity,
+                      cancelStatus: 'Cancel Requested'
+                    },
+                    method: 'post',
+                    success: (response) => {
+                      console.log(response)
+                      if (response.status) {
+                        swal("Cancel Request Inititated !", {
+                          icon: "success",
+                        }).then(() => {
+                          location.reload()
+                        })
+                      }
+                      else {
+                        swal("Order remains")
+                      }
+                    }
+                  })
+
+                }
+              })
+          }
+        })
     }
   }
-//return order
+  //return order
 
-function returnOrder(orderId,prodId){
-  console.log(orderId,prodId,"Ids for return order")
+  function returnOrder(orderId, prodId) {
+    console.log(orderId, prodId, "Ids for return order")
 
-  $.ajax({
-    url:'/return-product',
-    data:{
-      orderId:orderId,
-      productId:prodId,
-      returnStatus:'Return Requested'
-    },
-    method:'post',
-    success:(response)=>{
-      console.log(response.status)
-      if(response.status){
-        swal({
-                title: "Return Request!",
-                text: "Return Request Initiated!",
-                icon: "success",
-                button: "Ok!",
-              }).then(()=>{
-                location.reload();
-              });
-      }
+    swal({
+      title: "Return Request",
+      text: "Are you sure you want to return the order?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((willReturn) => {
+        if (willReturn) {
+          swal({
+            title: 'Enter Reason',
+            text: 'Please enter reason for Returning !',
+            content: {
+              element: 'input',
+              attributes: {
+                placeholder: "Reason",
+                type: 'text'
+              },
+            },
+            buttons: {
+              cancel: true,
+              confirm: {
+                text: "Submit",
+                value: true,
+                visible: true,
+                className: "btn-danger",
+                closeModal: true
+              }
+            }
+          })
+            .then((reason) => {
+              if (reason) {
+                $.ajax({
+                  url: '/return-product',
+                  data: {
+                    reason: reason,
+                    orderId: orderId,
+                    productId: prodId,
+                    returnStatus: 'Return Requested'
+                  },
+                  method: 'post',
+                  success: (response) => {
+                    console.log(response)
+                    if (response.status) {
+                      swal("Cancel Request Inititated !", {
+                        icon: "success",
+                      }).then(() => {
+                        location.reload()
+                      })
+                    }
+                    else {
+                      swal("Order remains")
+                    }
+                  }
+                })
+              }
+            })
+        }
+      })
+  }
 
-    }
-  })
 
-}
-
-  
 </script>

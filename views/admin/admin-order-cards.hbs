@@ -6,6 +6,7 @@
           
           <div class="card-header px-4 py-5">
             <h5 class="text-muted mb-0">These are the orders</h5>
+            <br>
             <h6>Name: {{totalOrderDetails.name}}</h6>
             <h6>Address : {{totalOrderDetails.address.address}}</h6>
             <h6>City : {{totalOrderDetails.address.city}}</h6>
@@ -42,7 +43,7 @@
                     <p class="text-muted mb-0 small">Qty: {{this.quantity}} </p>
                   </div>
                   <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                    <p class="text-muted mb-0 small">Price: ₹ {{this.productDetail.price}}</p>
+                    <p class="text-muted mb-0 small">Price: ₹ {{this.finalAmount}}</p>
                   </div>
 
                   <select onchange="updateDeliveryStatus(value,'{{this._id}}','{{this.item}}')" class="form-select  ml-auto mr-3" aria-label="Default select example" id="status-select" >
@@ -69,7 +70,7 @@
                     
                     {{/isEqual}}
 
-                    {{#isEqual this.status 'Cancel Request'}}
+                    {{#isEqual this.status 'Cancel Requested'}}
                     <option value="Cancelled">Cancelled</option>
                     {{/isEqual}}
 
@@ -86,14 +87,82 @@
                   <div class="col-md-2">
                     <p class="text-muted mb-0 small">Track Order</p>
                   </div>
+                  {{#isEqual this.status 'placed'}}
                   <div class="col-md-10">
                     <div class="progress" style="height: 6px; border-radius: 16px;">
                       <div class="progress-bar" role="progressbar"
-                        style="width: 65%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        style="width: 10%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
                         aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Shipped'}}
+                  <div class="col-md-10">
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 40%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Out for Delivery'}}
+                  <div class="col-md-10">
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 90%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Delivered'}}
+                  <div class="col-md-10">
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 100%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Cancel Requested'}}
+                  <div class="col-md-10">
+                    <h6>Reason for Cancellation :{{../this.cancelReason}} </h6>
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 50%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Return Requested'}}
+                  <div class="col-md-10">
+                    <h6>Reason for Return :{{../this.returnReason}} </h6>
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 100%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Cancelled'}}
+                    
+                  <div class="col-md-10 ">
+                    
+                    <h6>Reason for Cancellation :{{../this.cancelReason}} </h6>
+                   
+                    <div class="progress " style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar " role="progressbar"
+                        style="width: 0%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                        
+                    </div>
+                    
+                    {{/isEqual}}
+                    {{#isEqual this.status 'Returned'}}
+                  <div class="col-md-10">
+                    <h6>Reason for Return :{{../this.returnReason}} </h6>
+                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                      <div class="progress-bar" role="progressbar"
+                        style="width: 0%; border-radius: 16px; background-color: #292560;" aria-valuenow="65"
+                        aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {{/isEqual}}
+
                     <div class="d-flex justify-content-around mb-1">
-                      <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                      <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivery</p>
                       <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
                     </div>
                   </div>
@@ -142,4 +211,35 @@
   let idCheck=document.getElementById('status-select').value
   
   console.log(idCheck,"This is id check")
+
+
+
+  //update delivery status
+  function updateDeliveryStatus(value,orderId,prodId){
+    console.log(value,orderId,prodId,"checking parameters")
+
+    $.ajax({
+        url:'/admin/product-status',
+        data:{
+            order:orderId,
+            product:prodId,
+            changeValue:value
+        },
+        method:'post',
+        success:(response)=>{
+            console.log(response,"what is response in change status")
+            swal({
+                title: "Status Updated!",
+                text: "Delivery status updated!",
+                icon: "success",
+                button: "Ok!",
+              }).then(()=>{
+                location.reload();
+              });
+            
+        }
+    })
+
+    
+ }
 </script>

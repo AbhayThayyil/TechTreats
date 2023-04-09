@@ -4,7 +4,8 @@ var userHelper=require('../helpers/user-helpers')
 const categoryHelper=require('../helpers/category-helpers')
 const inventoryHelper=require('../helpers/inventory-helpers')
 const couponHelper=require('../helpers/coupon-helpers')
-
+const bannerHelper=require('../helpers/banner-helpers')
+const chartHelper=require('../helpers/chart-helpers')
 
 
 
@@ -35,20 +36,38 @@ module.exports={
         res.redirect('/admin')
     },
     //admin-dashboard
-    adminDash:(req, res, next)=> {
+    adminDash:async(req, res)=> {
+        if(req.session.admin){
+            let totalSales=await chartHelper.getTotalSales()
+            let totalRevenue=await chartHelper.getTotalRevenue()
+            let totalCustomers=await chartHelper.getTotalUsers()
+            let monthlyGraph=await chartHelper.getMonthlyGraph()
+            let salesReport=await chartHelper.getSalesReport()
+            let weeklyGraph=await chartHelper.getWeeklyGraph()
+            let recentSales=await chartHelper.getRecentSales()
+
+            res.render('admin/admin-dashboard',{layout:'admin-layout', admin:true,adminInSession:req.session.admin,totalSales,totalRevenue,totalCustomers,monthlyGraph,salesReport,weeklyGraph,recentSales});
+        }
         
-        res.render('admin/admin-dashboard',{layout:'admin-layout', admin:true,adminInSession:req.session.admin});
+        
       },
 
 
     //admin-view-products  
     adminViewProducts:(req,res)=>{
-        productHelper.getAllProducts().then((products)=>{
+        let pageNumber=1;
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+        productHelper.getAllProducts(pageNumber).then((products)=>{
             let images=products.image
-
+            console.log(products,"prodobj plss");
+           
             // console.log("=================all products after getallproducts in viewproducts==============");
            
-            res.render('admin/view-products',{layout:'admin-layout',admin:true,products,adminInSession:req.session.admin,images})
+            res.render('admin/view-products',{layout:'admin-layout',admin:true,products:products.products,
+            adminInSession:req.session.admin,images,totalPages:products.totalPgs,pageNumber:products.pageNo,
+            next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
         })
         .catch((error)=>{
             console.log(error);
@@ -58,7 +77,7 @@ module.exports={
 
       //admin-add-product
     adminAddProduct:(req,res)=>{
-        categoryHelper.getAllCategories().then((categories)=>{
+        categoryHelper.getAllCategoriesOnly().then((categories)=>{
 
             // console.log(categories,"============all categories check in addproduct======");
             
@@ -75,7 +94,7 @@ module.exports={
         
         // console.log(prodId);
         let product=await productHelper.getProductDetails(prodId)
-        let categories=await categoryHelper.getAllCategories()
+        let categories=await categoryHelper.getAllCategoriesOnly()
 
         // console.log(product);
 
@@ -94,11 +113,17 @@ module.exports={
     },
     //admin-view all users
     viewUsers:async(req,res)=>{
-        await userHelper.getAllUsers().then((users)=>{
+
+        let pageNumber=1
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+        await userHelper.getAllUsers(pageNumber).then((users)=>{
 
             // console.log(users,"=============to view all the users================");
 
-            res.render('admin/view-users',{layout:'admin-layout',admin:true,users,adminInSession:req.session.admin})
+            res.render('admin/view-users',{layout:'admin-layout',admin:true,users:users.users,adminInSession:req.session.admin,
+            totalPages:users.totalPages,pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
         }).catch((error)=>{
             console.log(error);
         })
@@ -129,13 +154,19 @@ module.exports={
 
     //admin-view-categories
     viewCategories:(req,res)=>{
-        categoryHelper.getAllCategories().then((categories)=>{
+        let pageNumber=1
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+        categoryHelper.getAllCategories(pageNumber).then((categories)=>{
 
 
-            // console.log(categories,"=======all categories check in viewcategories======");
+            console.log(categories,"=======all categories check in viewcategories======");
 
 
-            res.render('admin/view-categories',{layout:'admin-layout',admin:true,categories,adminInSession:req.session.admin})
+            res.render('admin/view-categories',{layout:'admin-layout',admin:true,categories,adminInSession:req.session.admin,
+            categories:categories.categories,totalPages:categories.totalPages,pageNumber,
+            next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
             
         }).catch((error)=>{
             console.log(error);
@@ -182,10 +213,17 @@ module.exports={
     },
 
     adminViewOrders:async(req,res)=>{
-        let orderDetails=await adminHelper.adminGetOrders()
+        let pageNumber=1
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+
+        let orderDetails=await adminHelper.adminGetOrders(pageNumber)
         
         console.log(orderDetails,"check order details");
-        res.render('admin/admin-view-orders',{orderDetails,adminInSession:req.session.admin,admin:true,adminInSession:req.session.admin,layout:'admin-layout'},)
+        res.render('admin/admin-view-orders',{orderDetails:orderDetails.orderDetails,adminInSession:req.session.admin,admin:true,
+            adminInSession:req.session.admin,layout:'admin-layout',
+            totalPages:orderDetails.totalPages,pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
     },
 
     viewAdminProductCards:async(req,res)=>{
@@ -204,9 +242,14 @@ module.exports={
 
     //view coupon-coupon management
     viewCoupon:async(req,res)=>{
-        let coupon=await couponHelper.doViewCoupon()
+        let pageNumber=1
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+        let coupon=await couponHelper.doViewCoupon(pageNumber)
         console.log(coupon);
-        res.render('admin/coupon-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,coupon})
+        res.render('admin/coupon-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,
+        coupon:coupon.coupon,totalPages:coupon.totalPages,pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
     },
     
     //edit coupon get
@@ -214,7 +257,7 @@ module.exports={
     editCoupon:async(req,res)=>{
         let couponId=req.query.id
         let couponData=await couponHelper.getCouponData(couponId)
-        res.render('admin/edit-coupon',{layout:'admin-layout',adminInSession:req.session.admin,couponData})
+        res.render('admin/edit-coupon',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,couponData})
     },
 
     //delete coupon get
@@ -225,6 +268,62 @@ module.exports={
         })
 
     },
+
+    //**********************************BANNER **************** */
+
+    viewBanner:(req,res)=>{
+        let pageNumber=1
+        if(req.query.page){
+            pageNumber=req.query.page
+        }
+        
+        bannerHelper.getBanners(pageNumber).then((bannerData)=>{
+            console.log(bannerData,"this is the banner details");
+            res.render('admin/banner-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,
+            bannerData:bannerData.bannerData,totalPages:bannerData.totalPages,
+            pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
+        })
+    },
+
+
+    //add banner-get (to show the form to add banner)
+    addBanner:(req,res)=>{
+        categoryHelper.getAllCategoriesOnly().then((categories)=>{
+            res.render('admin/add-banner',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,categories})
+
+        })
+    },
+
+    //edit existing banner
+    editBanner:(req,res)=>{
+        let bannerId=req.query.id
+        bannerHelper.getBannerDetails(bannerId).then((bannerDetails)=>{
+            console.log(bannerDetails,"these are banner details in get edit banner");
+            categoryHelper.getAllCategoriesOnly().then((categories)=>{
+                res.render('admin/edit-banner',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,bannerDetails,categories})
+
+            })
+        })
+    },
+
+    //delete existing banner
+
+    deleteBanner:(req,res)=>{
+        let bannerId=req.params.id
+        bannerHelper.doDeleteBanner(bannerId).then(()=>{
+            res.redirect('/admin/banner-management')
+        })
+    },
+
+    //to get sales report
+    salesReport:async(req,res)=>{
+        let salesData=await chartHelper.getSalesReport()
+        console.log(salesData,"what is sales data in controller");
+        
+        
+        res.render('admin/sales-report',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,salesData})
+    },
+
     
 
            
@@ -377,21 +476,25 @@ module.exports={
     updateStatus:(req,res)=>{
         // console.log("is it working");
         productHelper.changeOrderStatus(req.body).then((response)=>{
+            console.log(response,"change order status");
             res.json(response)
         })
     },
     //add coupon post
     postAddCoupon:(req,res)=>{
         console.log(req.body,"what is in coupon body");
-        req.body.couponvalue=parseInt(req.body.couponvalue)
-        req.body.couponStartDate=new Date(req.body.couponStartDate)
-        req.body.couponEndDate=new Date(req.body.couponEndDate)
+        req.body.couponName=req.body.couponName.toUpperCase()
+        req.body.discountPercent=parseInt(req.body.discountPercent)
+        req.body.validFrom=new Date(req.body.validFrom)
+        req.body.validTill=new Date(req.body.validTill)
         req.body.minAmount=parseInt(req.body.minAmount)
         req.body.maxAmount=parseInt(req.body.maxAmount)
-        req.body.usageLimit=parseInt(req.body.usageLimit)
-        req.body.usageLimitUser=parseInt(req.body.usageLimitUser)
-        req.body.noOfItems=parseInt(req.body.noOfItems)
-
+        req.body.maxUses=parseInt(req.body.maxUses)
+        req.body.usedBy=[]
+        
+        if(req.body.validFrom > req.body.validTill){
+            
+        }
         couponHelper.doAddCoupon(req.body).then(()=>{
             res.redirect('/admin/view-coupons')
         })
@@ -414,6 +517,59 @@ module.exports={
             res.redirect('/admin/view-coupons')
         })
     },
+
+    sendRefundProcess:(req,res)=>{
+        console.log(req.body,"refund body");
+
+    },
+    //**********************************BANNER **************** */
+    
+    
+    
+    
+    //post add banner to post the form with banner data
+    postAddBanner:(req,res)=>{
+
+        req.body.image1=req.files.bannerImage1[0].filename
+        req.body.image2=req.files.bannerImage2[0].filename
+        req.body.image3=req.files.bannerImage3[0].filename
+        req.body.image4=req.files.bannerImage4[0].filename
+        
+
+        
+        console.log(req.files);
+        console.log(req.body,"what is being added in the banner");
+
+        bannerHelper.doAddBanner(req.body)
+        res.redirect('/admin/banner-management')
+
+    },
+
+    //post edit banner to edit a selected banner
+
+    postEditBanner:(req,res)=>{
+        let bannerId=req.query.id
+        console.log(bannerId);
+        console.log(req.files,"this is files");
+        console.log(req.body,"this is body");
+        req.body.image1=req.files.bannerImage1[0].filename
+        req.body.image2=req.files.bannerImage2[0].filename
+        req.body.image3=req.files.bannerImage3[0].filename
+        req.body.image4=req.files.bannerImage4[0].filename
+        
+
+        bannerHelper.updateBanner(bannerId,req.body).then(()=>{
+            res.redirect('/admin/banner-management')
+        })
+    },
+
+    sortSales:(req,res)=>{
+        console.log(req.body,"What is passed in sortSales");
+        chartHelper.getFilteredReport(req.body.fromDate,req.body.toDate).then((filteredSalesReport)=>{
+            res.render('admin/filtered-sales-report',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,filteredSalesReport}) 
+        })
+
+    }
 
     
 
