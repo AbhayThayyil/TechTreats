@@ -285,51 +285,104 @@ module.exports = {
       }
     });
   },
-  storeReview: (review, userId, prodId) => {
-    return new Promise(async(resolve, reject) => {
-      await db.get()
-        .collection(collection.USER_COLLECTION)
-        .findOne({ _id: objectId(userId) })
-        .then(async(userData) => {
-          console.log(userData);
-          let userDataForReview = {
-            name: userData.name,
-            email: userData.email,
-            review: review,
-            date:new Date()
-          };
-          let productData=await db.get().collection(collection.PRODUCT_COLLECTION).findOne({_id:objectId(prodId)})
-          if (productData.reviewData) {
-            console.log("There is something in review data");
+  storeReview: (reviewData, userId, prodId) => {
+    return new Promise(async (resolve, reject) => {
+      let userProductDelivered = await db
+        .get()
+        .collection(collection.ORDER_COLLECTION)
+        .aggregate([
+          {
+            $match: {
+              userId: objectId(userId),
+              products: {
+                $elemMatch: {
+                  item: objectId(prodId),
+                  status: "Delivered",
+                },
+              },
+            },
+          },
+        ])
+        .toArray();
+      console.log(userProductDelivered, "If user has this product delivered");
+
+      if (userProductDelivered.length !== 0) {
+        console.log("User has this product delivered");
+        let userData = await db
+          .get()
+          .collection(collection.USER_COLLECTION)
+          .findOne({ _id: objectId(userId) });
+        let productData = await db
+          .get()
+          .collection(collection.PRODUCT_COLLECTION)
+          .findOne({ _id: objectId(prodId) });
+
+        //console.log(userData,"user details");
+        let userDataForReview = {
+          userId: objectId(userId),
+          name: userData.name,
+          email: userData.email,
+          reviewTitle: reviewData.reviewTitle,
+          reviewContent: reviewData.reviewContent,
+          reviewRating: parseInt(reviewData.reviewRating),
+          date: new Date(),
+        };
+
+        //console.log(productData,"product data");
+        if (productData.reviewData) {
+          console.log("Review data not empty");
+
+          let reviewExist =await db
+            .get()
+            .collection(collection.PRODUCT_COLLECTION)
+            .aggregate([
+              {
+                $match: {
+                  _id: objectId(prodId),
+                  reviewData: {
+                    $elemMatch: {
+                      userId: objectId(userId),
+                    },
+                  },
+                },
+              },
+            ])
+            .toArray();
+            console.log(reviewExist,"review exist");
+          if (reviewExist.length !== 0) {
+            console.log("This user already reviewed");
+            resolve({alreadyReviewd:true})
+          } else {
+            console.log("This user have not reviewed yet");
             db.get()
               .collection(collection.PRODUCT_COLLECTION)
               .updateOne(
                 { _id: objectId(prodId) },
                 { $push: { reviewData: userDataForReview } }
-              )
-              .then(() => {
-                resolve();
-              });
-          } else {
-            console.log("There is nothing in review data");
-            db.get()
-              .collection(collection.PRODUCT_COLLECTION)
-              .updateOne(
-                { _id: objectId(prodId) },
-                {
-                  $set: { reviewData: [userDataForReview]},
-                }
-              )
-              .then(() => {
-                resolve();
-              });
+              );
+            console.log("Review updated");
+            resolve({reviewUpdated:true})
           }
-        });
+        } else {
+          console.log("Review data is empty");
+          db.get()
+            .collection(collection.PRODUCT_COLLECTION)
+            .updateOne(
+              { _id: objectId(prodId) },
+              {
+                $set: { reviewData: [userDataForReview] },
+              }
+            );
+          console.log("Review updated");
+          resolve({reviewUpdated:true})
+        }
+      }
+      // MARK 1
+      else {
+        console.log("User do not have this product delivered, so cannot post review");
+        resolve({unDelivered:true})
+      }
+      resolve()
     });
   },
 };
-
-
-
-
-

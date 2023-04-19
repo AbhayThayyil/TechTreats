@@ -22,7 +22,7 @@
 
                 {{#each products}}
                 <tr>
-                    <th scope="row">{{@index}}</th>
+                    <th scope="row">{{indexFrom1 @index}}</th>
                     <td>{{this.name}}</td>
                     <td><img style="width:50px;height:50px" src="/productImages/{{this.image.[0]}}" alt=""></td>
                     <td>{{this.stock}}</td>

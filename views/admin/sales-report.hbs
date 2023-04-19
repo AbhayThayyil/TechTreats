@@ -40,7 +40,7 @@
             <tbody>
               {{#each salesData}}
               <tr>
-                <th scope="row">{{@index}}</th>
+                <th scope="row">{{indexFrom1 @index}}</th>
                 <td>{{this.productName}}</td>
                 <td>{{this.orderQuantity}}</td>
                 <td>₹ {{this.productPrice}}</td>

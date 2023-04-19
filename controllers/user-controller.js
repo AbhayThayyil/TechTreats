@@ -148,14 +148,52 @@ module.exports={
     showProductDetail:(req,res)=>{
         let userInSession=req.session.user
         let prodId=req.query.id
-        console.log(prodId,"checking prodid by query");
+        //console.log(prodId,"checking prodid by query");
         productHelper.getSingleProduct(prodId).then((product)=>{
-            console.log(product,"What is to be displayed");
+            //console.log(product,"What is to be displayed");
             if(product.reviewData){
                 product.reviewData.sort((a,b)=>{
                     return b.date - a.date
                 })
-                //console.log(product.reviewData,"sorted review?");
+
+                function generateStarRating(rating){
+                    const fullStarCount = Math.floor(rating);
+                    const halfStarCount = Math.ceil(rating - fullStarCount);
+                    const emptyStarCount = 5 - fullStarCount - halfStarCount;
+                    let html = "";
+                    for (let i = 0; i < fullStarCount; i++) {
+                      html += '<i class="fa fa-star"></i>';
+                    }
+                    for (let i = 0; i < halfStarCount; i++) {
+                      html += '<i class="fa fa-star-half"></i>';
+                    }
+                    for (let i = 0; i < emptyStarCount; i++) {
+                      html += '<i class="fa fa-star-o"></i>';
+                    }
+                    return html;
+                  }
+
+                product.reviewData.forEach((product) => {
+                    const options = {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      };
+                      const humanReadableDate = product.date.toLocaleDateString(
+                        "en-US",
+                        options
+                      );
+                      // console.log(humanReadableDate);
+                      product.date = humanReadableDate;
+                    
+                      // Star rating 
+                    const starRating=generateStarRating(product.reviewRating)
+                    product.reviewRating=starRating    
+                });
+
+                
+                console.log(product.reviewData,"sorted review?");
             // res.render('user/product-detail',{layout:'layout',userInSession,product})
             res.render('user/single-product',{layout:'layout',userInSession,product,user:true,reviewData:product.reviewData})
             }
@@ -172,15 +210,18 @@ module.exports={
 
     // To submit a product review
     submitReview:(req,res)=>{
-        console.log(req.body,"what is the review");
-        console.log(req.session.user._id,"user id");
-        console.log(req.body.prodId,"product id");
+         console.log(req.body,"what is the review");
+        // console.log(req.session.user._id,"user id");
+        // console.log(req.body.prodId,"product id");
         if(!req.session.user){
             res.redirect("/user-login")
         }
-        productHelper.storeReview(req.body.review,req.session.user._id,req.body.prodId).then(()=>{
-            console.log("Review submitted");
-            res.redirect('/product-detail?id='+req.body.prodId)
+        
+        productHelper.storeReview(req.body,req.session.user._id,req.body.prodId).then((response)=>{
+            //console.log("Review submitted");
+            res.json(response)
+            // res.redirect('/product-detail?id='+req.body.prodId)
+           
         })
     },
     //get-otp-login page
@@ -362,6 +403,7 @@ module.exports={
         
         userHelper.getAddress(userInSession._id).then((address)=>{
             userHelper.showOrdersInprofile(userInSession._id).then((orders)=>{
+                
                 //console.log(orders,"orders to user profile");
                 res.render('user/user-profile',{user:true,userInSession,address,orders})
             })
@@ -390,7 +432,7 @@ module.exports={
     editImportantCreds:(req,res)=>{
         let userInSession=req.session.user
         userHelper.getUserData(userInSession._id).then((userData)=>{
-            res.render('user/edit-important-credential',{userData})
+            res.render('user/edit-important-credential',{userData,'passwordUnmatchedError':"The passwords do not match"})
         })
     },
 
@@ -428,8 +470,8 @@ module.exports={
             // console.log(req.body,"sign up body");
             //console.log(response,"what is returned from helper");
             // console.log(response,"response check 2");
-            req.session.user=response
-            req.session.userLoggedIn=true  
+            // req.session.user=response
+            // req.session.userLoggedIn=true  
            // console.log(req.session,"whats in req session");
              
             
@@ -745,7 +787,7 @@ module.exports={
     postEditedImportantCreds:(req,res)=>{
         let userId=req.session.user._id
         console.log(req.body,"Important user data for edits");
-        userHelper.updateImportantUserData(userId,req.body).then(()=>{
+        userHelper.updateImportantUserData(userId,req.body).then((response)=>{
             res.redirect('/edit-credentials')
         })
     }

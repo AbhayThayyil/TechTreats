@@ -94,23 +94,37 @@
 
   <div class="container">
     {{#each reviewData}}
-    <h5><span><b>{{this.name}}</b></span>,({{this.email}})</h5> 
-    <p>{{this.review}}</p>
+    <h5><span><b>{{this.name}}</b></span></h5>
+    <h6>{{this.date}}</h6>
+    <p><span><b>{{this.reviewTitle}}</b></span></p>
+    <p>{{this.reviewContent}}</p>
+    <p style="color: #ff9f1a;">{{{this.reviewRating}}}</p>
     {{/each}}
   </div>
 
 
-  
+
+  <h2>Post your reviews here</h2>
   <form action="/submit-review" method="post">
     <div class="form-group">
-      <label for="review">Enter your review here</label>
-      <textarea class="form-control" id="review" name="review" rows="3"></textarea>
-      <input type="text" value="{{product._id}}" name="prodId" hidden>
-      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+      <label for="review-title">Enter your review title here</label>
+      <input type="text" class="form-control" id="review-title" name="reviewTitle" required>
+
+      <label for="review-content">Enter your review here</label>
+      <textarea class="form-control" id="review-content" name="reviewContent" rows="3" required></textarea>
+
+      <label for="review-rating">Enter your rating here</label>
+      <input type="number" class="form-control" id="review-rating" name="reviewRating" required>
+
+
+      <p class="text-danger font-weight-bold" id="reviewRatingError"></p>
+
+      <input type="text" value="{{product._id}}" name="prodId" id="prodId" hidden>
+      <button type="button" class="btn btn-primary mt-3" onclick="postReview()">Submit</button>
     </div>
   </form>
 
-  
+
 </div>
 
 
@@ -373,6 +387,51 @@
 
 
 <script>
+
+
+  // To submit the Review
+  function postReview() {
+    let reviewTitle = document.getElementById('review-title').value
+    let reviewContent = document.getElementById('review-content').value
+    let reviewRating = document.getElementById('review-rating').value
+    let prodId = document.getElementById('prodId').value
+
+    let reviewRatingError = document.getElementById('reviewRatingError')
+
+    if (reviewRating < 0 || reviewRating > 5) {
+      reviewRatingError.textContent = "Please enter a rating from 1 to 5"
+    }
+    else {
+      $.ajax({
+        url: '/submit-review',
+        data: {
+          reviewTitle: reviewTitle,
+          reviewContent: reviewContent,
+          reviewRating: reviewRating,
+          prodId: prodId
+        },
+        method: 'post',
+        success: (response) => {
+          
+          console.log("done")
+          if(response.unDelivered){
+            reviewRatingError.textContent = "You cannot review as you have not received the product"
+          }
+          else if(response.alreadyReviewd){
+            reviewRatingError.textContent = "You have already reviewed the product"
+          }
+          else if(response.reviewUpdated){
+            console.log(response)
+            location.reload()
+          }
+          
+        }
+      })
+    }
+  }
+
+
+
 
   let magnifyingArea = document.getElementById("magnifying-area")
   let magnifyingImg1 = document.getElementById("imageToZoom1")

@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const { ClientSession } = require("mongodb");
 const moment = require("moment");
 const { uid } = require("uid");
-const dotenv=require('dotenv').config()
+const dotenv = require("dotenv").config();
 
 //const otp=require('../config/otp')
 
@@ -24,10 +24,8 @@ const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
   mode: "sandbox", //sandbox or live
-  client_id:
-    process.env.CLIENT_ID,
-  client_secret:
-    process.env.CLIENT_SECRET,
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.CLIENT_SECRET,
 });
 
 module.exports = {
@@ -59,7 +57,7 @@ module.exports = {
   },
 
   doLogIn: (userData) => {
-    console.log(userData,"login check ");
+    console.log(userData, "login check ");
     return new Promise(async (resolve, reject) => {
       try {
         let loginStatus = false;
@@ -69,7 +67,7 @@ module.exports = {
           .collection(collection.USER_COLLECTION)
           .findOne({ email: userData.email });
         if (user) {
-          bcrypt.compare(userData.password,user.password).then((status) => {
+          bcrypt.compare(userData.password, user.password).then((status) => {
             // console.log(status,"result check");
             if (status) {
               console.log("login success");
@@ -518,8 +516,8 @@ module.exports = {
                 discountPrice: "$discountPrice",
                 finalPrice: "$finalPrice",
                 status: "$products.status",
-                cancelReason:'$products.cancelReason',
-                returnReason:'$products.returnReason',
+                cancelReason: "$products.cancelReason",
+                returnReason: "$products.returnReason",
                 userName: "$userName",
                 paymentMethod: "$paymentMethod",
                 address: "$deliveryDetails.address",
@@ -544,8 +542,8 @@ module.exports = {
                 discountPrice: 1,
                 finalPrice: 1,
                 status: 1,
-                cancelReason:1,
-                returnReason:1,
+                cancelReason: 1,
+                returnReason: 1,
                 userName: 1,
                 paymentMethod: 1,
                 date: 1,
@@ -560,8 +558,8 @@ module.exports = {
                 discountPrice: 1,
                 finalPrice: 1,
                 status: 1,
-                cancelReason:1,
-                returnReason:1,
+                cancelReason: 1,
+                returnReason: 1,
                 userName: 1,
                 paymentMethod: 1,
                 date: 1,
@@ -859,7 +857,7 @@ module.exports = {
   },
 
   //to cancel COD orders
-  cancelCODOrder: (orderId, prodId, quantity, status,cancelReason) => {
+  cancelCODOrder: (orderId, prodId, quantity, status, cancelReason) => {
     quantity = parseInt(quantity);
     return new Promise((resolve, reject) => {
       db.get()
@@ -872,7 +870,10 @@ module.exports = {
             ],
           },
           {
-            $set: { "products.$.status": status ,"products.$.cancelReason": cancelReason},
+            $set: {
+              "products.$.status": status,
+              "products.$.cancelReason": cancelReason,
+            },
           }
         )
         .then(() => {
@@ -885,7 +886,7 @@ module.exports = {
               }
             )
             .then(() => {
-              resolve({ status: true, orderId, prodId ,cancelReason});
+              resolve({ status: true, orderId, prodId, cancelReason });
             })
             .catch(() => {
               reject();
@@ -895,7 +896,7 @@ module.exports = {
   },
 
   //cancel order
-  cancelOrder: (orderId, prodId, quantity, status,cancelReason) => {
+  cancelOrder: (orderId, prodId, quantity, status, cancelReason) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.ORDER_COLLECTION)
@@ -907,17 +908,20 @@ module.exports = {
             ],
           },
           {
-            $set: { "products.$.status": status , "products.$.cancelReason": cancelReason},
+            $set: {
+              "products.$.status": status,
+              "products.$.cancelReason": cancelReason,
+            },
           }
         )
         .then(() => {
-          resolve({ status: true, orderId, prodId ,cancelReason});
+          resolve({ status: true, orderId, prodId, cancelReason });
         });
     });
   },
 
   //return order
-  doReturnOrder: (orderId, prodId, status,returnReason) => {
+  doReturnOrder: (orderId, prodId, status, returnReason) => {
     return new Promise((resolve, reject) => {
       db.get()
         .collection(collection.ORDER_COLLECTION)
@@ -929,7 +933,10 @@ module.exports = {
             ],
           },
           {
-            $set: { "products.$.status": status ,"products.$.returnReason": returnReason},
+            $set: {
+              "products.$.status": status,
+              "products.$.returnReason": returnReason,
+            },
           }
         )
         .then(() => {
@@ -1048,61 +1055,97 @@ module.exports = {
         ])
         .sort({ orderId: -1 })
         .toArray();
-      console.log(orders);
+
+      orders.forEach((order) => {
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        const humanReadableDate = order.date.toLocaleDateString(
+          "en-US",
+          options
+        );
+        // console.log(humanReadableDate);
+        order.date = humanReadableDate;
+      });
+      console.log(orders, "These are orders to show in profile");
       resolve(orders);
     });
   },
 
   // To remove pending status after a payment fail
 
-  removePendingStatus:()=>{
-    return new Promise((resolve,reject)=>{
-      db.get().collection(collection.ORDER_COLLECTION).deleteMany({products:{$elemMatch:{status:'pending'}}})
-      .then(()=>{
-        resolve()
-      })
-    })
+  removePendingStatus: () => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.ORDER_COLLECTION)
+        .deleteMany({ products: { $elemMatch: { status: "pending" } } })
+        .then(() => {
+          resolve();
+        });
+    });
   },
 
   // To get a particular user details to display in edit user creds
 
-  getUserData:(userId)=>{
-    return new Promise(async(resolve,reject)=>{
-      userData=await db.get().collection(collection.USER_COLLECTION).findOne({_id:objectId(userId)})
-      console.log(userData,"particular user data");
-      resolve(userData)
-    })
+  getUserData: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      userData = await db
+        .get()
+        .collection(collection.USER_COLLECTION)
+        .findOne({ _id: objectId(userId) });
+      console.log(userData, "particular user data");
+      resolve(userData);
+    });
   },
 
   // To update basic user data/creds
 
-  updateBasicUserData:(userId,userData)=>{
-    return new Promise((resolve,reject)=>{
-      db.get().collection(collection.USER_COLLECTION).updateOne({_id:objectId(userId)},
-      {$set:{'name':userData.name,'mobile':userData.mobile}})
-      .then(()=>{
-        resolve()
-    })
-    })
+  updateBasicUserData: (userId, userData) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.USER_COLLECTION)
+        .updateOne(
+          { _id: objectId(userId) },
+          { $set: { name: userData.name, mobile: userData.mobile } }
+        )
+        .then(() => {
+          resolve();
+        });
+    });
   },
 
   // To update important user creds (username/password)
 
-  updateImportantUserData:(userId,userData)=>{
-    return new Promise(async(resolve,reject)=>{
-      let user=await db.get().collection(collection.USER_COLLECTION).findOne({_id:objectId(userId)})
-      if(user){
-        console.log(userData,user);
-        userData.NewPassword=await bcrypt.hash(userData.NewPassword,10)
-        console.log(userData.NewPassword,"new password check");
-        db.get().collection(collection.USER_COLLECTION).updateOne({_id:objectId(userId)},
-        {$set:{'email':userData.email,'password':userData.NewPassword}}).then(()=>{
-          resolve()
-        })
-      }
-      else{
+  updateImportantUserData: (userId, userData) => {
+    return new Promise(async (resolve, reject) => {
+      let user = await db
+        .get()
+        .collection(collection.USER_COLLECTION)
+        .findOne({ _id: objectId(userId) });
+      if (user) {
+        console.log(userData, user);
+        
+          userData.NewPassword = await bcrypt.hash(userData.NewPassword, 10);
+          console.log(userData.NewPassword, "new password check");
+          db.get()
+            .collection(collection.USER_COLLECTION)
+            .updateOne(
+              { _id: objectId(userId) },
+              {
+                $set: { email: userData.email, password: userData.NewPassword },
+              }
+            )
+            .then(() => {
+              resolve();
+            });
+        
+        
+      } else {
         console.log("No user ");
       }
-    })
-  }
+    });
+  },
 };

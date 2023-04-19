@@ -29,7 +29,7 @@
 
                 {{#each bannerData}}
                 <tr>
-                    <th scope="row">{{@index}}</th>
+                    <th scope="row">{{indexFrom1 @index}}</th>
                     <td>{{this.bannerName}}</td>
                     <td>{{this.bannerDescription1}}</td>
                     <td><img style="width:75px;height:75px;object-fit:contain" src="../bannerImages/{{this.image1}} " alt=""></td>
