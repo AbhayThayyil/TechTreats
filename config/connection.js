@@ -4,9 +4,9 @@ const MongoClient=require('mongodb').MongoClient
 const state={
     db:null
 }
-
+let uri="mongodb+srv://abhaythayyil:Abhay*abiz98@cluster0.tujohhk.mongodb.net/?retryWrites=true&w=majority"
 module.exports.connect=function(done){
-    const url='mongodb+srv://abhaythayyil:Abhay*abiz98@cluster0.tujohhk.mongodb.net/test'
+    const url=uri
     const dbname='TechTreats'
 
     MongoClient.connect(url,(err,data)=>{
