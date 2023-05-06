@@ -143,13 +143,6 @@ router.post('/apply-coupon',verifyLogin,submitCoupon)
 router.post('/stock-reduce',verifyLogin,stockReduce)
 
 
-//*******************************************  404    */
-
-// router.get('/error-page',verifyLogin,userController.errorPage)
-
-
-
-router.get('*',userController.errorPage)
 
 
 

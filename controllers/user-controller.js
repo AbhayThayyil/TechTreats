@@ -458,12 +458,7 @@ module.exports={
         })
     },
 
-    // 404 page
-
-    errorPage:(req,res)=>{
-        res.render('user/404')
-    },
-
+    
     
 
 
