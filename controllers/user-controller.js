@@ -89,6 +89,7 @@ module.exports={
                 
             }).catch((error)=>{
                 console.log(error);
+                res.render('user/404')
             })
         }
         // console.log(userInSession,"check session user");
@@ -112,6 +113,7 @@ module.exports={
                 
             }).catch((error)=>{
                 console.log(error);
+                res.render('user/404')
             })
         }
       },
@@ -205,6 +207,7 @@ module.exports={
         })
         .catch((error)=>{
             console.log(error);
+            res.render('user/404')
         })
     },
 
@@ -269,6 +272,7 @@ module.exports={
             res.redirect('/')
         }).catch((error)=>{
             console.log(error);
+            res.render('user/404')
         })
     },
     //checkout page
@@ -372,6 +376,7 @@ module.exports={
                 
             }).catch((error)=>{
                 console.log(error);
+                res.render('user/404')
             })
         }
         else{
@@ -393,6 +398,7 @@ module.exports={
                 
             }).catch((error)=>{
                 console.log(error);
+                res.render('user/404')
             })
         }
 
@@ -410,6 +416,7 @@ module.exports={
             
         }).catch((error)=>{
             console.log(error);
+            res.render('user/404')
         })
         
     },
@@ -449,6 +456,12 @@ module.exports={
             // console.log(walletData);
             res.render('user/wallet',{user:true,userInSession:req.session.user,walletData})
         })
+    },
+
+    // 404 page
+
+    errorPage:(req,res)=>{
+        res.render('user/404')
     },
 
     
