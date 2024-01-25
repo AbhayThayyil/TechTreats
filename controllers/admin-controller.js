@@ -61,7 +61,7 @@ module.exports={
         }
         productHelper.getAllProducts(pageNumber).then((products)=>{
             let images=products.image
-            console.log(products,"prodobj plss");
+            // console.log(products,"prodobj plss");
            
             // console.log("=================all products after getallproducts in viewproducts==============");
            
@@ -161,7 +161,7 @@ module.exports={
         categoryHelper.getAllCategories(pageNumber).then((categories)=>{
 
 
-            console.log(categories,"=======all categories check in viewcategories======");
+            // console.log(categories,"=======all categories check in viewcategories======");
 
 
             res.render('admin/view-categories',{layout:'admin-layout',admin:true,categories,adminInSession:req.session.admin,
@@ -220,7 +220,7 @@ module.exports={
 
         let orderDetails=await adminHelper.adminGetOrders(pageNumber)
         
-        console.log(orderDetails,"check order details");
+        // console.log(orderDetails,"check order details");
         res.render('admin/admin-view-orders',{orderDetails:orderDetails.orderDetails,adminInSession:req.session.admin,admin:true,
             adminInSession:req.session.admin,layout:'admin-layout',
             totalPages:orderDetails.totalPages,pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
@@ -228,10 +228,10 @@ module.exports={
 
     viewAdminProductCards:async(req,res)=>{
         let orderId=req.query.id
-        console.log(orderId,"===order id===");
+        // console.log(orderId,"===order id===");
         let totalOrderDetails=await userHelper.getProducts(orderId)
         let totalPaid=totalOrderDetails[0].totalPrice
-        console.log(totalOrderDetails);
+        // console.log(totalOrderDetails,"total order details");
 
         res.render('admin/admin-order-cards',{admin:true,adminInSession:req.session.admin,totalOrderDetails,totalPaid})
     },
@@ -247,7 +247,7 @@ module.exports={
             pageNumber=req.query.page
         }
         let coupon=await couponHelper.doViewCoupon(pageNumber)
-        console.log(coupon);
+        // console.log(coupon,"coupon");
         res.render('admin/coupon-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,
         coupon:coupon.coupon,totalPages:coupon.totalPages,pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
     },
@@ -278,7 +278,7 @@ module.exports={
         }
         
         bannerHelper.getBanners(pageNumber).then((bannerData)=>{
-            console.log(bannerData,"this is the banner details");
+            // console.log(bannerData,"this is the banner details");
             res.render('admin/banner-management',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,
             bannerData:bannerData.bannerData,totalPages:bannerData.totalPages,
             pageNumber,next:parseInt(pageNumber)+1,previous:parseInt(pageNumber)-1})
@@ -298,7 +298,7 @@ module.exports={
     editBanner:(req,res)=>{
         let bannerId=req.query.id
         bannerHelper.getBannerDetails(bannerId).then((bannerDetails)=>{
-            console.log(bannerDetails,"these are banner details in get edit banner");
+            // console.log(bannerDetails,"these are banner details in get edit banner");
             categoryHelper.getAllCategoriesOnly().then((categories)=>{
                 res.render('admin/edit-banner',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,bannerDetails,categories})
 
@@ -318,7 +318,7 @@ module.exports={
     //to get sales report
     salesReport:async(req,res)=>{
         let salesData=await chartHelper.getSalesReport()
-        console.log(salesData,"what is sales data in controller");
+        // console.log(salesData,"what is sales data in controller");
         
         
         res.render('admin/sales-report',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,salesData})
@@ -379,7 +379,7 @@ module.exports={
             })
             req.body.image=image
             
-             console.log(req.body);
+            //  console.log(req.body);
 
         productHelper.addProduct(req.body,(id)=>{
             
@@ -478,13 +478,13 @@ module.exports={
     updateStatus:(req,res)=>{
         // console.log("is it working");
         productHelper.changeOrderStatus(req.body).then((response)=>{
-            console.log(response,"change order status");
+            // console.log(response,"change order status");
             res.json(response)
         })
     },
     //add coupon post
     postAddCoupon:(req,res)=>{
-        console.log(req.body,"what is in coupon body");
+        // console.log(req.body,"what is in coupon body");
         req.body.couponName=req.body.couponName.toUpperCase()
         req.body.discountPercent=parseInt(req.body.discountPercent)
         req.body.validFrom=new Date(req.body.validFrom)
@@ -521,7 +521,7 @@ module.exports={
     },
 
     sendRefundProcess:(req,res)=>{
-        console.log(req.body,"refund body");
+        // console.log(req.body,"refund body");
 
     },
     //**********************************BANNER **************** */
@@ -539,8 +539,8 @@ module.exports={
         
 
         
-        console.log(req.files);
-        console.log(req.body,"what is being added in the banner");
+        // console.log(req.files);
+        // console.log(req.body,"what is being added in the banner");
 
         bannerHelper.doAddBanner(req.body)
         res.redirect('/admin/banner-management')
@@ -551,9 +551,9 @@ module.exports={
 
     postEditBanner:(req,res)=>{
         let bannerId=req.query.id
-        console.log(bannerId);
-        console.log(req.files,"this is files");
-        console.log(req.body,"this is body");
+        // console.log(bannerId);
+        // console.log(req.files,"this is files");
+        // console.log(req.body,"this is body");
         req.body.image1=req.files.bannerImage1[0].filename
         req.body.image2=req.files.bannerImage2[0].filename
         req.body.image3=req.files.bannerImage3[0].filename
@@ -566,7 +566,7 @@ module.exports={
     },
 
     sortSales:(req,res)=>{
-        console.log(req.body,"What is passed in sortSales");
+        // console.log(req.body,"What is passed in sortSales");
         chartHelper.getFilteredReport(req.body.fromDate,req.body.toDate).then((filteredSalesReport)=>{
             res.render('admin/filtered-sales-report',{admin:true,layout:'admin-layout',adminInSession:req.session.admin,filteredSalesReport}) 
         })

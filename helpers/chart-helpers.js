@@ -29,7 +29,7 @@ module.exports = {
           },
         ])
         .toArray();
-      console.log(totalRevenue, "Total reveneue from aggregation");
+      // console.log(totalRevenue, "Total reveneue from aggregation");
       resolve(totalRevenue[0].totalAmount);
     });
   },
@@ -41,7 +41,7 @@ module.exports = {
         .get()
         .collection(collection.USER_COLLECTION)
         .count();
-      console.log(customers, "Total number of customers");
+      // console.log(customers, "Total number of customers");
       resolve(customers);
     });
   },
@@ -81,7 +81,7 @@ module.exports = {
           },
         ])
         .toArray();
-      console.log(salesReport, "The sales report");
+      // console.log(salesReport, "The sales report");
       let total = 0;
       salesReport.forEach((element) => {
         total = total + element.totalRevenue;
@@ -95,7 +95,7 @@ module.exports = {
   //to get filtered sales report
 
   getFilteredReport: (fromDate, toDate) => {
-    console.log(fromDate, toDate, "date checks for filtered report");
+    // console.log(fromDate, toDate, "date checks for filtered report");
 
     return new Promise(async (resolve, reject) => {
       let filteredSalesReport = await db
@@ -133,14 +133,14 @@ module.exports = {
           },
         ])
         .toArray();
-        console.log(filteredSalesReport,"filtered sales");
+        // console.log(filteredSalesReport,"filtered sales");
       let total = 0;
       filteredSalesReport.forEach((element) => {
         total = total + element.revenue;
       });
-      console.log(total,"final total check");
+      // console.log(total,"final total check");
       filteredSalesReport.finalGrossAmount = total;
-      console.log(filteredSalesReport,"sales report from a date to another date");
+      // console.log(filteredSalesReport,"sales report from a date to another date");
 
       resolve(filteredSalesReport);
     });
@@ -156,7 +156,7 @@ module.exports = {
         .sort({ _id: -1 })
         .limit(5)
         .toArray();
-      console.log(recentSales, "Recent 5 sales done");
+      // console.log(recentSales, "Recent 5 sales done");
       resolve(recentSales);
     });
   },
@@ -189,7 +189,7 @@ module.exports = {
           { $limit: 12 },
         ])
         .toArray();
-      console.log(monthlyGraph, "Monthly graph data ");
+      // console.log(monthlyGraph, "Monthly graph data ");
 
       // to convert a month number to month name using toLocaleString()
       monthlyGraph.forEach((element) => {
@@ -201,7 +201,7 @@ module.exports = {
         element.month = getMonthName(element.month);
         //end
 
-        console.log(monthlyGraph, "monthly data after month name conversion");
+        // console.log(monthlyGraph, "monthly data after month name conversion");
         resolve(monthlyGraph);
       });
     });
@@ -239,14 +239,14 @@ module.exports = {
         ])
         .toArray();
 
-      console.log(weeklyGraph, "weekly data");
+      // console.log(weeklyGraph, "weekly data");
 
       weeklyGraph.forEach((weeklyGraph) => {
         weeklyGraph.ddmmyy =
           weeklyGraph.date + "/" + weeklyGraph.month + "/" + weeklyGraph.year;
       });
 
-      console.log(weeklyGraph, "final weekly graph data");
+      // console.log(weeklyGraph, "final weekly graph data");
       resolve(weeklyGraph);
     });
   },
@@ -284,7 +284,7 @@ module.exports = {
         ])
         .toArray();
 
-      console.log(weeklyQuantity, "weekly quantity of product sales");
+      // console.log(weeklyQuantity, "weekly quantity of product sales");
       resolve(weeklyQuantity);
     });
   },

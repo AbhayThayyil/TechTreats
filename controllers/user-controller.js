@@ -36,7 +36,7 @@ module.exports={
         if(req.query.search){
             search=req.query.search
         }
-        console.log(search);
+        console.log(search,"search query");
         //search end
 
 
@@ -51,7 +51,7 @@ module.exports={
                 const filteredProducts=products.filter(product=>{
                     return product.name.toLowerCase().includes(search.toLowerCase())
                 })
-                console.log(filteredProducts,"============These will be the filtered products");
+                // console.log(filteredProducts,"============These will be the filtered products");
                 //search trial end
 
 
@@ -68,14 +68,14 @@ module.exports={
         }
         else{
             productHelper.getAllProductsOnly().then((products)=>{
-                console.log(products,"product list-not logged in");
+                // console.log(products,"product list-not logged in");
 
 
                 //search trial start
                 const filteredProducts=products.filter(product=>{
                     return product.name.toLowerCase().includes(search.toLowerCase())
                 })
-                console.log(filteredProducts,"============These will be the filtered products");
+                // console.log(filteredProducts,"============These will be the filtered products");
 
                 //search trial end
 
@@ -195,7 +195,7 @@ module.exports={
                 });
 
                 
-                console.log(product.reviewData,"sorted review?");
+                // console.log(product.reviewData,"sorted review?");
             // res.render('user/product-detail',{layout:'layout',userInSession,product})
             res.render('user/single-product',{layout:'layout',userInSession,product,user:true,reviewData:product.reviewData})
             }
@@ -213,7 +213,7 @@ module.exports={
 
     // To submit a product review
     submitReview:(req,res)=>{
-         console.log(req.body,"what is the review");
+        //  console.log(req.body,"what is the review");
         // console.log(req.session.user._id,"user id");
         // console.log(req.body.prodId,"product id");
         if(!req.session.user){
@@ -248,14 +248,14 @@ module.exports={
             total=await userHelper.getTotalAmount(req.session.user._id)
         }
         else{
-            console.log("No products in cart");
+            // console.log("No products in cart");
         }
         
         
         // console.log(products,"===data from cart of each user===");
         //console.log(cartCount,"no of elements in cart");
         if(cartCount==0){
-            console.log("Cart is empty");
+            // console.log("Cart is empty");
             res.redirect('/')
         }
         else{
@@ -302,7 +302,7 @@ module.exports={
     getAddressFromDropdown:(req,res)=>{
         let addressId=req.params.id
         userHelper.getUniqueAddress(req.session.user._id,addressId).then((selectedAddress)=>{
-            console.log(selectedAddress,"===This is the selected address===");
+            // console.log(selectedAddress,"===This is the selected address===");
             res.json(selectedAddress)
         })
     },
@@ -318,7 +318,7 @@ module.exports={
 
     viewProductCards:async(req,res)=>{
         let orderId=req.params.id
-        console.log(orderId,"===order id===");
+        // console.log(orderId,"===order id===");
         let totalOrderDetails=await userHelper.getProducts(orderId)
         
         let totalPaid=totalOrderDetails[0].totalPrice
@@ -327,7 +327,7 @@ module.exports={
         let discountAmount=totalOrderDetails[0].discountPrice
         let finalAmount=totalOrderDetails[0].finalPrice
         // console.log(totalPaid,"total paid check");
-         console.log(totalOrderDetails,"what is in cards prod details");
+        //  console.log(totalOrderDetails,"what is in cards prod details");
         //  console.log(userName);
         
         
@@ -351,7 +351,7 @@ module.exports={
         //search end
 
         let categoryName=req.query.name
-        console.log(categoryName,"catname");
+        // console.log(categoryName,"catname");
         let userInSession=req.session.user
         let cartCount=null;
         if(userInSession){
@@ -362,13 +362,13 @@ module.exports={
                 const filteredProducts=products.filter(product=>{
                     return product.name.toLowerCase().includes(search.toLowerCase())
                 })
-                console.log(filteredProducts,"============These will be the filtered products");
+                // console.log(filteredProducts,"============These will be the filtered products");
                 //search trial end
 
                 categoryHelper.getAllCategoriesOnly().then((categories)=>{
                     // console.log(categories,"show categories");
                     bannerHelper.getBannersOnly().then((bannerData)=>{
-                        console.log(bannerData);
+                        // console.log(bannerData,"banner data");
                         res.render('user/user-category-home',{user:true,products,userInSession,cartCount,categories,bannerData,filteredProducts})
                     })
                     
@@ -387,7 +387,7 @@ module.exports={
                 const filteredProducts=products.filter(product=>{
                     return product.name.toLowerCase().includes(search.toLowerCase())
                 })
-                console.log(filteredProducts,"============These will be the filtered products");
+                // console.log(filteredProducts,"============These will be the filtered products");
                 //search trial end
                 
                 categoryHelper.getAllCategoriesOnly().then((categories)=>{
@@ -530,10 +530,10 @@ module.exports={
     
         // console.log(req.body,"what we enter when we enter number");
         otpHelper.doOtpLogin(req.body).then((response)=>{
-            console.log(response,"=========what is repsosne=======");
+            // console.log(response,"=========what is repsosne=======");
             if(response.status){
                 signupData=response.user;
-                console.log(signupData,"======signupdata=======");
+                // console.log(signupData,"======signupdata=======");
                 res.redirect('/verify-otp')
             }
             else{
@@ -542,16 +542,16 @@ module.exports={
         }).catch((error)=>{
             console.log(error);
         })
-        console.log(req.body,"chekcing body we enter");
+        // console.log(req.body,"chekcing body we enter");
     },
     
     postVerifyOtp:(req,res)=>{
         
-        console.log(req.body,"===the otp we enter====");
+        // console.log(req.body,"===the otp we enter====");
         
-            console.log(signupData,"===================sign up data============");
+            // console.log(signupData,"===================sign up data============");
         otpHelper.doVerifyOtp(req.body,signupData).then((response)=>{
-            console.log(response,"=================response=================");
+            // console.log(response,"=================response=================");
             if(response.status){
                 req.session.userLoggedIn=true;
                 req.session.user=signupData;
@@ -567,11 +567,11 @@ module.exports={
     },
 
     changeProductQuantity:(req,res,next)=>{
-        console.log(req.body,"change product quantity");
+        // console.log(req.body,"change product quantity");
         userHelper.doChangeproductQuantity(req.body).then(async(response)=>{
             response.total=await userHelper.getTotalAmount(req.body.user)
             res.json(response)
-            console.log(response,"change prod quantity controller");
+            // console.log(response,"change prod quantity controller");
         }).catch((error)=>{
             console.log(error);
         })
@@ -589,11 +589,11 @@ module.exports={
     //checkout post
 
     postCheckout:async(req,res)=>{
-        console.log(req.body,"checking postcheckout body");
+        // console.log(req.body,"checking postcheckout body");
         req.body.userName=req.session.user.name   //adding user details to req.body
-        console.log(req.body,"req.body check");
+        // console.log(req.body,"req.body check");
         let products=await userHelper.getCartProductList(req.body.userId)
-        console.log(products,"products check");
+        // console.log(products,"products check");
         let totalPrice=await userHelper.getTotalAmount(req.body.userId)
         
         //let address=await userHelper.getUniqueAddress(req.body.userId,req.body.addressId)
@@ -602,20 +602,20 @@ module.exports={
         let discountAmount=parseInt(req.body.discountAmount)
         let finalPrice=parseInt(req.body.finalPrice)
 
-        console.log(req.body,"=============new check==========");
+        // console.log(req.body,"=============new check==========");
         if(req.body.coupon){
             couponHelpers.updateCouponStatus(req.body.coupon,req.body.userId).then(()=>{
-                console.log("Coupon DB updated");
+                // console.log("Coupon DB updated");
             })
         }
         userHelper.placeOrder(req.body,products,subTotal,discountAmount,finalPrice).then(async(orderId)=>{
         //    console.log(req.session.user,"user login details");
-            console.log(req.body,"===checking what is in post checkout===");
+            // console.log(req.body,"===checking what is in post checkout===");
             
            
             if(req.body['payment-method']==='COD'){
                 res.json({codSuccess:true,products})
-                console.log(response,"====response after COD order completed====");
+                // console.log(response,"====response after COD order completed====");
                 
             }
             else if(req.body['payment-method']==='RazorPay'){
@@ -627,7 +627,7 @@ module.exports={
                 })
             }
             else if(req.body['payment-method']==='PayPal'){
-                console.log(finalPrice,products,"////checking paypal parameters////");
+                // console.log(finalPrice,products,"////checking paypal parameters////");
                 // Creating payment object for paypal
                 const payment={
                     intent: "sale",
@@ -689,10 +689,10 @@ module.exports={
 
 
     doVerifyPayment:(req,res)=>{
-        console.log(req.body,"===do verify payment===");
+        // console.log(req.body,"===do verify payment===");
         userHelper.paymentVerification(req.body).then(()=>{
             userHelper.changePaymentStatus(req.body['order[receipt]']).then(()=>{
-                console.log("Payment successful");
+                // console.log("Payment successful");
                 res.json({status:true})
             })
         }).catch((err)=>{
@@ -714,7 +714,7 @@ module.exports={
 
     },
     deleteAddresses:(req,res)=>{
-        console.log("ajax check");
+        // console.log("ajax check");
           userHelper.doDeleteAddress(req.body).then((response)=>{
             res.json(response)
         }).catch((error)=>{
@@ -728,9 +728,9 @@ module.exports={
         //console.log(req.session.user._id,"user id check");
         req.body.totalPrice=parseInt(req.body.totalPrice)
         req.body.userId=req.session.user._id
-        console.log(req.body,"=======coupon data========");
+        // console.log(req.body,"=======coupon data========");
         couponHelpers.enterCoupon(req.body).then((response)=>{
-            console.log(response);
+            // console.log(response);
             res.json(response)
         }).catch((err)=>{
             let couponError=err.couponError
@@ -741,7 +741,7 @@ module.exports={
 
     //reduce stock quantity
     stockReduce:(req,res)=>{
-        console.log(req.body,"what is passed from ajax");
+        // console.log(req.body,"what is passed from ajax");
         userHelper.decreaseStock(req.body.products).then(()=>{
 
         }).catch((error)=>{
@@ -750,10 +750,10 @@ module.exports={
     },
 
     cancelOrder:(req,res)=>{
-        console.log(req.body,"what is passed from ajax");
+        // console.log(req.body,"what is passed from ajax");
 
         if(req.body.cancelStatus=='Cancelled'){
-            console.log(req.body.quantity,"how much to cancel");
+            // console.log(req.body.quantity,"how much to cancel");
             userHelper.cancelCODOrder(req.body.orderId,req.body.productId,req.body.quantity,req.body.cancelStatus,req.body.reason)
             .then((response)=>{
                 res.json(response)
@@ -762,7 +762,7 @@ module.exports={
             })
         }
         else if (req.body.cancelStatus=='Cancel Requested'){
-            console.log('Cancel Requested');
+            // console.log('Cancel Requested');
             userHelper.cancelOrder(req.body.orderId,req.body.productId,req.body.quantity,req.body.cancelStatus,req.body.reason)
             .then((response)=>{
                 res.json(response)
@@ -784,7 +784,7 @@ module.exports={
 
     postEditedBasicCreds:(req,res)=>{
         let userId=req.session.user._id
-        console.log(req.body,"Basic user data for edits");
+        // console.log(req.body,"Basic user data for edits");
         userHelper.updateBasicUserData(userId,req.body).then(()=>{
             res.redirect('/edit-credentials')
         })
@@ -794,7 +794,7 @@ module.exports={
 
     postEditedImportantCreds:(req,res)=>{
         let userId=req.session.user._id
-        console.log(req.body,"Important user data for edits");
+        // console.log(req.body,"Important user data for edits");
         userHelper.updateImportantUserData(userId,req.body).then((response)=>{
             res.redirect('/edit-credentials')
         })

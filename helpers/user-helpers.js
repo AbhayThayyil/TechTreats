@@ -57,7 +57,7 @@ module.exports = {
   },
 
   doLogIn: (userData) => {
-    console.log(userData, "login check ");
+    // console.log(userData, "login check ");
     return new Promise(async (resolve, reject) => {
       try {
         let loginStatus = false;
@@ -141,7 +141,7 @@ module.exports = {
           let prodExist = userCart.products.findIndex(
             (product) => product.item == prodId
           );
-          console.log(prodExist, "===prod exist or not===");
+          // console.log(prodExist, "===prod exist or not===");
           if (prodExist != -1) {
             db.get()
               .collection(collection.CART_COLLECTION)
@@ -290,7 +290,7 @@ module.exports = {
             .then((response) => {
               // console.log(response,"========response check of less thn 1=====");
               resolve({ removeProduct: true });
-              console.log(response, "this is response");
+              // console.log(response, "this is response");
             });
         } else {
           db.get()
@@ -307,7 +307,7 @@ module.exports = {
             .then((response) => {
               // console.log(response,"====response chk after adding====");
               resolve({ status: true });
-              console.log(response, "this is resposne");
+              // console.log(response, "this is resposne");
             });
         }
       } catch (error) {
@@ -417,10 +417,10 @@ module.exports = {
     // products.products.status="placed"
     return new Promise((resolve, reject) => {
       try {
-        console.log(
-          products,
-          "==================what is products============="
-        );
+        // console.log(
+        //   products,
+        //   "==================what is products============="
+        // );
         //  console.log(orderDetails,products,total,"===placeorder parameters===");
 
         let date = new Date();
@@ -450,7 +450,7 @@ module.exports = {
           date: date,
           OrderStatus: status,
         };
-        console.log(orderObj, "===ORDER OBJECT===");
+        // console.log(orderObj, "===ORDER OBJECT===");
         db.get()
           .collection(collection.ORDER_COLLECTION)
           .insertOne(orderObj)
@@ -581,7 +581,7 @@ module.exports = {
             let name = userAddress[0].userName;
             totalOrderDetails.address = address;
             totalOrderDetails.name = name;
-            console.log(totalOrderDetails, "Total Order Details");
+            // console.log(totalOrderDetails, "Total Order Details");
             resolve(totalOrderDetails);
           });
 
@@ -607,7 +607,7 @@ module.exports = {
           if (err) {
             console.log(err);
           } else {
-            console.log("New Order:", order);
+            // console.log("New Order:", order);
             resolve({ razorpaySuccess: true, order });
           }
         });
@@ -743,7 +743,7 @@ module.exports = {
           .toArray();
         let length = userData.length;
         let address = userData[0].address;
-        console.log(length);
+        // console.log(length);
         resolve(address);
       } catch (error) {
         let err = {};
@@ -806,7 +806,7 @@ module.exports = {
             },
           ])
           .toArray();
-        console.log(address[0], "what is in address");
+        // console.log(address[0], "what is in address");
         resolve(address[0]);
       } catch (error) {
         let err = {};
@@ -823,7 +823,7 @@ module.exports = {
         .get()
         .collection(collection.USER_COLLECTION)
         .findOne({ address: { $elemMatch: { addressid: addressId } } });
-      console.log(selectedAddress, "plsss come address");
+      // console.log(selectedAddress, "plsss come address");
     });
   },
 
@@ -833,7 +833,7 @@ module.exports = {
       if (products != null) {
         let allProducts = JSON.parse(products);
         let limit = allProducts.products.length;
-        console.log(limit, "limit");
+        // console.log(limit, "limit");
 
         for (i = 0; i < limit; i++) {
           let prodId = allProducts.products[i].item;
@@ -1016,7 +1016,7 @@ module.exports = {
         ])
         .sort({ _id: -1 })
         .toArray();
-      console.log(wallet);
+      // console.log(wallet,"wallet");
       resolve(wallet);
     });
   },
@@ -1070,7 +1070,7 @@ module.exports = {
         // console.log(humanReadableDate);
         order.date = humanReadableDate;
       });
-      console.log(orders, "These are orders to show in profile");
+      // console.log(orders, "These are orders to show in profile");
       resolve(orders);
     });
   },
@@ -1096,7 +1096,7 @@ module.exports = {
         .get()
         .collection(collection.USER_COLLECTION)
         .findOne({ _id: objectId(userId) });
-      console.log(userData, "particular user data");
+      // console.log(userData, "particular user data");
       resolve(userData);
     });
   },
@@ -1126,10 +1126,10 @@ module.exports = {
         .collection(collection.USER_COLLECTION)
         .findOne({ _id: objectId(userId) });
       if (user) {
-        console.log(userData, user);
+        // console.log(userData, "user");
         
           userData.NewPassword = await bcrypt.hash(userData.NewPassword, 10);
-          console.log(userData.NewPassword, "new password check");
+          // console.log(userData.NewPassword, "new password check");
           db.get()
             .collection(collection.USER_COLLECTION)
             .updateOne(
@@ -1144,7 +1144,7 @@ module.exports = {
         
         
       } else {
-        console.log("No user ");
+        // console.log("No user ");
       }
     });
   },

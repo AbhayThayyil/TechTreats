@@ -8,8 +8,8 @@ module.exports={
             try {
                 let inventory=db.get().collection(collection.INVENTORY_COLLECTION).find().toArray()
                 let products=db.get().collection(collection.PRODUCT_COLLECTION).find().toArray()
-                console.log(inventory);
-                console.log(products);
+                // console.log(inventory."inventory");
+                // console.log(products,"products");
                 resolve(inventory)
                 resolve(products)
             } catch (error) {
@@ -25,7 +25,7 @@ module.exports={
         // console.log(catId,"cat ID check");
         
         data.newStock=parseInt(data.newStock)
-        console.log(data,"=================add stock======");
+        // console.log(data,"=================add stock======");
         return new Promise(async (resolve,reject)=>{
             try {
                 db.get().collection(collection.PRODUCT_COLLECTION).updateOne({_id:objectId(data.id)}
@@ -34,7 +34,7 @@ module.exports={
                         stock:data.newStock
                     }
                 }).then((response)=>{
-                    console.log(response,"=================add stock response ======");
+                    // console.log(response,"=================add stock response ======");
                     resolve()
                 })
             } catch (error) {

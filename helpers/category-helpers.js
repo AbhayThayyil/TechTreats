@@ -17,13 +17,13 @@ module.exports={
             
             if(categoryData){
                 // console.log(categoryData,"====================all category data of this==========");
-                console.log("Entered category exists");
+                // console.log("Entered category exists");
                 resolve({status:false})
             }
             else{
                 
                 db.get().collection(collection.CATEGORY_COLLECTION).insertOne(category).then((data)=>{
-                    console.log(data);
+                    // console.log(data);
                     resolve({status:true})
                     // resolve(data.insertedId);
             })

@@ -8,7 +8,7 @@ module.exports = {
     // console.log(product,"====add product=======");
     product.stock = parseInt(product.stock);
     product.price = parseInt(product.price);
-    console.log(product.price);
+    // console.log(product.price);
     try {
       db.get()
         .collection(collection.PRODUCT_COLLECTION)
@@ -48,10 +48,10 @@ module.exports = {
           .skip((pageNumber - 1) * prodLimit)
           .limit(prodLimit)
           .toArray();
-        console.log(
-          products,
-          "=====================products stored in products variable after getting it from DB========="
-        );
+        // console.log(
+        //   products,
+        //   "=====================products stored in products variable after getting it from DB========="
+        // );
         const totalProducts = await db
           .get()
           .collection(collection.PRODUCT_COLLECTION)
@@ -94,7 +94,7 @@ module.exports = {
           .sort({ _id: -1 })
           .toArray();
         // console.log(products,"=====================products stored in products variable after getting it from DB=========");
-        console.log(products, "cat products");
+        // console.log(products, "cat products");
         resolve(products);
       } catch (error) {
         let err = {};
@@ -304,10 +304,10 @@ module.exports = {
           },
         ])
         .toArray();
-      console.log(userProductDelivered, "If user has this product delivered");
+      // console.log(userProductDelivered, "If user has this product delivered");
 
       if (userProductDelivered.length !== 0) {
-        console.log("User has this product delivered");
+        // console.log("User has this product delivered");
         let userData = await db
           .get()
           .collection(collection.USER_COLLECTION)
@@ -330,7 +330,7 @@ module.exports = {
 
         //console.log(productData,"product data");
         if (productData.reviewData) {
-          console.log("Review data not empty");
+          // console.log("Review data not empty");
 
           let reviewExist =await db
             .get()
@@ -348,23 +348,23 @@ module.exports = {
               },
             ])
             .toArray();
-            console.log(reviewExist,"review exist");
+            // console.log(reviewExist,"review exist");
           if (reviewExist.length !== 0) {
-            console.log("This user already reviewed");
+            // console.log("This user already reviewed");
             resolve({alreadyReviewd:true})
           } else {
-            console.log("This user have not reviewed yet");
+            // console.log("This user have not reviewed yet");
             db.get()
               .collection(collection.PRODUCT_COLLECTION)
               .updateOne(
                 { _id: objectId(prodId) },
                 { $push: { reviewData: userDataForReview } }
               );
-            console.log("Review updated");
+            // console.log("Review updated");
             resolve({reviewUpdated:true})
           }
         } else {
-          console.log("Review data is empty");
+          // console.log("Review data is empty");
           db.get()
             .collection(collection.PRODUCT_COLLECTION)
             .updateOne(
@@ -373,13 +373,13 @@ module.exports = {
                 $set: { reviewData: [userDataForReview] },
               }
             );
-          console.log("Review updated");
+          // console.log("Review updated");
           resolve({reviewUpdated:true})
         }
       }
       // MARK 1
       else {
-        console.log("User do not have this product delivered, so cannot post review");
+        // console.log("User do not have this product delivered, so cannot post review");
         resolve({unDelivered:true})
       }
       resolve()

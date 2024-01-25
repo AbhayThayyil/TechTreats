@@ -28,7 +28,7 @@ module.exports={
             let bannerData=await db.get().collection(collection.BANNER_COLLECTION).find()
             .skip((pageNumber-1)*prodLimit).limit(prodLimit).toArray()
             
-                console.log(bannerData,"=========banner data in banner helper==========");
+                // console.log(bannerData,"=========banner data in banner helper==========");
                 const totalBanners=await db.get().collection(collection.BANNER_COLLECTION).countDocuments()
                 const totalPages=Math.ceil(totalBanners/prodLimit)
 
