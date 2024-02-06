@@ -795,6 +795,7 @@ module.exports={
     postEditedImportantCreds:(req,res)=>{
         let userId=req.session.user._id
         // console.log(req.body,"Important user data for edits");
+        
         userHelper.updateImportantUserData(userId,req.body).then((response)=>{
             res.redirect('/edit-credentials')
         })

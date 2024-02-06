@@ -9,25 +9,26 @@
 					<div class="card-body">
 
 						<div class="form-group">
-								<label for="demo_overview">Add from Existing Address *</label>
-								<select onchange="selectedAddress()"  id="address" class="form-control"
-									data-role="select-dropdown" required>
-									<!-- options -->
-									<option selected value="{{this.addressid}}">Add from Existing Address</option>
+							<label for="demo_overview">Add from Existing Address *</label>
+							<select onchange="selectedAddress()" id="address" class="form-control"
+								data-role="select-dropdown" required>
+								<!-- options -->
+								<option selected value="{{this.addressid}}">Add from Existing Address</option>
 
-									{{#each address}}
-
-
-									<option value="{{this.addressid}}">Address:{{this.address}},{{this.city}},{{this.pincode}},Mob:{{this.mobile}}</option>
-
-									{{/each}}
+								{{#each address}}
 
 
+								<option value="{{this.addressid}}">
+									Address:{{this.address}},{{this.city}},{{this.pincode}},Mob:{{this.mobile}}</option>
 
-								</select>
-							</div>
+								{{/each}}
 
-						
+
+
+							</select>
+						</div>
+
+
 
 						<!-- Text input -->
 						<div class="form-outline mb-4">
@@ -54,10 +55,10 @@
 						</div>
 
 						<input type="text" name="userId" id="" value="{{userInSession._id}}" hidden>
-						
-						
 
-						
+
+
+
 
 					</div>
 				</div>
@@ -73,12 +74,12 @@
 							<li
 								class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
 								Sub Total
-								<span id="sub-total">₹ {{total}}</span> 
+								<span id="sub-total">₹ {{total}}</span>
 								<input type="text" name="subTotal" id="subTotal" value="{{total}}" hidden>
 							</li>
 							<li class="list-group-item d-flex justify-content-between align-items-center px-0">
 								Discount
-								<span id="discount-amount">0</span> 
+								<span id="discount-amount">0</span>
 								<input id="discountAmount" type="text" name="discountAmount" value="0" hidden>
 							</li>
 							<li
@@ -92,14 +93,17 @@
 						</ul>
 
 						<div class="input-group">
-							<input type="text" id="couponName" class="form-control" name="coupon" placeholder="Coupon code">
+							<input type="text" id="couponName" class="form-control" name="coupon"
+								placeholder="Coupon code">
 							<div class="input-group-append">
-								<button type="button" onclick="applyCoupon()" id="applyButton" class="btn btn-secondary" style="z-index: 0;">Redeem</button>
-								<button type="button" onclick="removeCoupon()" id="removeButton" class="btn btn-secondary" style="z-index: 0;">Remove</button>
+								<button type="button" onclick="applyCoupon()" id="applyButton" class="btn btn-secondary"
+									style="z-index: 0;">Redeem</button>
+								<button type="button" onclick="removeCoupon()" id="removeButton"
+									class="btn btn-secondary" style="z-index: 0;">Remove</button>
 							</div>
-							
-								
-							
+
+
+
 						</div>
 						<div id="coupon-success" style="color: green;"></div>
 						<div id="coupon-error" style="color: red;"></div>
@@ -109,20 +113,25 @@
 
 
 						<div class="payment mt-4">
-							<strong><p>Payment Method</p></strong>
+							<strong>
+								<p>Payment Method</p>
+							</strong>
 							<div class="custom-control custom-radio mb-2">
-								<input id="credit" name="payment-method" type="radio" class="custom-control-input" value="COD" checked="">
+								<input id="credit" name="payment-method" type="radio" class="custom-control-input"
+									value="COD" checked="">
 								<label class="custom-control-label" for="credit">Cash On Delivery(COD)</label>
 							</div>
 							<div class="custom-control custom-radio mb-2">
-								<input id="debit" name="payment-method" type="radio" class="custom-control-input" value="RazorPay">
+								<input id="debit" name="payment-method" type="radio" class="custom-control-input"
+									value="RazorPay">
 								<label class="custom-control-label" for="debit">Razor Pay</label>
 							</div>
 							<div class="custom-control custom-radio mb-2">
-								<input id="paypal" name="payment-method" type="radio" class="custom-control-input" value="PayPal">
+								<input id="paypal" name="payment-method" type="radio" class="custom-control-input"
+									value="PayPal">
 								<label class="custom-control-label" for="paypal">PayPal</label>
 							</div>
-						
+
 							<div class="mt-5">
 								<h3 class="font-weight-bold"> Total:₹ <span id="totalAmount">{{total}}</span></h3>
 							</div>
@@ -140,189 +149,199 @@
 
 
 <script>
-	function selectedAddress(){
-		let e=document.getElementById("address")
-		let addressId=e.value
-		console.log(addressId,"This is e  value")
+	function selectedAddress() {
+		let e = document.getElementById("address")
+		let addressId = e.value
+		console.log(addressId, "This is e  value")
 
 		$.ajax({
-			url:'/select-address/'+addressId,
-			method:'get',
-			success:(response)=>{
-				document.getElementById("faddress").value=response.address,
-				document.getElementById("fcity").value=response.city,
-				document.getElementById("fpincode").value=response.pincode,
-				document.getElementById("fmobile").value=response.mobile
+			url: '/select-address/' + addressId,
+			method: 'get',
+			success: (response) => {
+				document.getElementById("faddress").value = response.address,
+					document.getElementById("fcity").value = response.city,
+					document.getElementById("fpincode").value = response.pincode,
+					document.getElementById("fmobile").value = response.mobile
 			}
 		})
 	}
 
 	//payment
 
-$("#checkout-form").submit((e)=>{
-    e.preventDefault() 
-    $.ajax({
-        url:'/checkout',
-        method:'post',
-        data:$('#checkout-form').serialize(),
-        success:(response)=>{
-            alert(response)
-            console.log(response,"======response checkout form in ajax========");
-            if(response.codSuccess){
-                $.ajax({
-                    url:'/stock-reduce',
-                    data:{
-                        products:JSON.stringify(response.products)
-                    },
-                    method:'post',
-                    success:(response)=>{
-                        if(response.stockReduce){
-                            location.href="/order-success"
-                        }
-                    }
-                })
-                location.href="/order-success"
-            }
-            else if(response.razorpaySuccess){               
-                razorpayPayment(response.order)
-            }
+	$("#checkout-form").submit((e) => {
+		e.preventDefault()
+		$.ajax({
+			url: '/checkout',
+			method: 'post',
+			data: $('#checkout-form').serialize(),
+			success: (response) => {
+				{ { !--alert(response) --} }
+				swal({
+					title: "Proceeded to Payment!",
+					text: "Payment stage!",
+					icon: "success",
+					button: "Ok!",
+				})
+					.then(() => {
+						location.reload();
+					})
+					
+				console.log(response, "======response checkout form in ajax========");
+				if (response.codSuccess) {
+					$.ajax({
+						url: '/stock-reduce',
+						data: {
+							products: JSON.stringify(response.products)
+						},
+						method: 'post',
+						success: (response) => {
+							if (response.stockReduce) {
+								location.href = "/order-success"
+							}
+						}
+					})
+					location.href = "/order-success"
+				}
+				else if (response.razorpaySuccess) {
+					razorpayPayment(response.order)
+				}
 
-			else if (response.paypalSuccess){
-				 console.log("checking reached or not")
-				 console.log(response.linkto,"link to ")
-				 location.replace(response.linkto)
+				else if (response.paypalSuccess) {
+					console.log("checking reached or not")
+					console.log(response.linkto, "link to ")
+					location.replace(response.linkto)
+				}
 			}
-        }
-    })
-	
- })
+		})
 
- function razorpayPayment(order){
-    var options = {
-        "key": "rzp_test_ewNm9lY0xHIOAt", // Enter the Key ID generated from the Dashboard
-        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        "currency": "INR",
-        "name": "Tech Treat",
-        "description": "Test Transaction",
-        "image": "https://example.com/your_logo",
-        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        "handler": function (response){
-            // alert(response.razorpay_payment_id);
-            // alert(response.razorpay_order_id);
-            // alert(response.razorpay_signature)
+	})
 
-            verifyPayment(response,order)
-        },
-        "prefill": {
-            "name": "Gaurav Kumar",
-            "email": "gaurav.kumar@example.com",
-            "contact": "9999999999"
-        },
-        "notes": {
-            "address": "Razorpay Corporate Office"
-        },
-        "theme": {
-            "color": "#3399cc"
-        }
-    };
-    var rzp1 = new Razorpay(options);
-    rzp1.open()
- }
+	function razorpayPayment(order) {
+		var options = {
+			"key": "rzp_test_ewNm9lY0xHIOAt", // Enter the Key ID generated from the Dashboard
+			"amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": "INR",
+			"name": "Tech Treat",
+			"description": "Test Transaction",
+			"image": "https://example.com/your_logo",
+			"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"handler": function (response) {
+				// alert(response.razorpay_payment_id);
+				// alert(response.razorpay_order_id);
+				// alert(response.razorpay_signature)
 
+				verifyPayment(response, order)
+			},
+			"prefill": {
+				"name": "Gaurav Kumar",
+				"email": "gaurav.kumar@example.com",
+				"contact": "9999999999"
+			},
+			"notes": {
+				"address": "Razorpay Corporate Office"
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.open()
+	}
 
 
- function verifyPayment(payment,order){
-    $.ajax({
-        url:'/verify-payment',
-        data:{
-            payment,
-            order
-        },
-        method:'post',
-        success:(response)=>{
-            if(response.status){
-                location.href="/order-success"
-            }
-            else{
-                swal({
-                    title: "Failure!",
-                    text: "Payment Failed!",
-                    icon: "error",
-                    button: "Ok!",
-                  })
-            }
-        }
-    })
- }
+
+	function verifyPayment(payment, order) {
+		$.ajax({
+			url: '/verify-payment',
+			data: {
+				payment,
+				order
+			},
+			method: 'post',
+			success: (response) => {
+				if (response.status) {
+					location.href = "/order-success"
+				}
+				else {
+					swal({
+						title: "Failure!",
+						text: "Payment Failed!",
+						icon: "error",
+						button: "Ok!",
+					})
+				}
+			}
+		})
+	}
 
 
-// Coupon
+	// Coupon
 
-function applyCoupon(){
-	let couponData=document.getElementById("couponName").value	
-		console.log(couponData,"hiii")
-		let totalPrice=document.getElementById("totalAmount").innerHTML
-		console.log(totalPrice,"totalprice")
+	function applyCoupon() {
+		let couponData = document.getElementById("couponName").value
+		console.log(couponData, "hiii")
+		let totalPrice = document.getElementById("totalAmount").innerHTML
+		console.log(totalPrice, "totalprice")
 
-		if(couponData){
+		if (couponData) {
 			$.ajax({
-				url:'/apply-coupon',
-				data:{
-					coupon:couponData,
-					totalPrice:totalPrice
+				url: '/apply-coupon',
+				data: {
+					coupon: couponData,
+					totalPrice: totalPrice
 				},
-				method:'post',
-				success:(response)=>{
-					if(response.couponError){
-						document.getElementById("coupon-error").innerHTML=response.couponError
-						setTimeout(()=>{
-							document.getElementById("coupon-error").innerHTML=''
-						},2000)
+				method: 'post',
+				success: (response) => {
+					if (response.couponError) {
+						document.getElementById("coupon-error").innerHTML = response.couponError
+						setTimeout(() => {
+							document.getElementById("coupon-error").innerHTML = ''
+						}, 2000)
 					}
-					else if(response.couponSuccess){
+					else if (response.couponSuccess) {
 						console.log(response)
-						document.getElementById("coupon-success").innerHTML=response.couponSuccess
-						setTimeout(()=>{
-							document.getElementById("coupon-success").innerHTML=''
-						},2000)
+						document.getElementById("coupon-success").innerHTML = response.couponSuccess
+						setTimeout(() => {
+							document.getElementById("coupon-success").innerHTML = ''
+						}, 2000)
 
 
-						
-						
-						
-						
-						
-						document.getElementById("sub-total").innerHTML=response.priceObj.totalPrice
-						document.getElementById("discount-amount").innerHTML=response.priceObj.discountPrice
-						document.getElementById("final-total").innerHTML=response.priceObj.finalPrice
-						document.getElementById("totalAmount").innerHTML=response.priceObj.finalPrice
 
-						document.getElementById("subTotal").value=response.priceObj.totalPrice
-						document.getElementById("discountAmount").value=response.priceObj.discountPrice
-						document.getElementById("finalTotal").value=response.priceObj.finalPrice
+
+
+
+
+						document.getElementById("sub-total").innerHTML = response.priceObj.totalPrice
+						document.getElementById("discount-amount").innerHTML = response.priceObj.discountPrice
+						document.getElementById("final-total").innerHTML = response.priceObj.finalPrice
+						document.getElementById("totalAmount").innerHTML = response.priceObj.finalPrice
+
+						document.getElementById("subTotal").value = response.priceObj.totalPrice
+						document.getElementById("discountAmount").value = response.priceObj.discountPrice
+						document.getElementById("finalTotal").value = response.priceObj.finalPrice
 						document.getElementById('applyButton').style.display = 'none'
 						document.getElementById('removeButton').style.display = 'block'
 
 					}
 				}
-					
+
 			})
 		}
 
-}
+	}
 
-function removeCoupon(){
-	let oldTotal=document.getElementById("sub-total").innerHTML
-	document.getElementById("final-total").innerHTML=oldTotal
-	document.getElementById("discount-amount").innerHTML=0
-	document.getElementById("totalAmount").innerHTML=oldTotal
+	function removeCoupon() {
+		let oldTotal = document.getElementById("sub-total").innerHTML
+		document.getElementById("final-total").innerHTML = oldTotal
+		document.getElementById("discount-amount").innerHTML = 0
+		document.getElementById("totalAmount").innerHTML = oldTotal
 
-	document.getElementById("subTotal").value=oldTotal
-	document.getElementById("discountAmount").value=0
-	document.getElementById("finalTotal").value=oldTotal
-	document.getElementById('applyButton').style.display = 'block'
-	document.getElementById('removeButton').style.display = 'none'
+		document.getElementById("subTotal").value = oldTotal
+		document.getElementById("discountAmount").value = 0
+		document.getElementById("finalTotal").value = oldTotal
+		document.getElementById('applyButton').style.display = 'block'
+		document.getElementById('removeButton').style.display = 'none'
 
-}
+	}
 
 </script>
